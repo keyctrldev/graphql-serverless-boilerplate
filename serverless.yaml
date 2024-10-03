@@ -1,0 +1,20 @@
+service: apollo-server-ts
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+
+functions:
+  graphql:
+    handler: dist/handler.graphqlHandler
+    events:
+      - http:
+          path: graphql
+          method: post
+      - http:
+          path: graphql
+          method: get
+          # cors: true
+
+plugins:
+  - serverless-offline
