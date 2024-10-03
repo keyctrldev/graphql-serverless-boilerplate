@@ -6,7 +6,7 @@ provider:
 
 functions:
   graphql:
-    handler: dist/handler.graphqlHandler
+    handler: dist/src/handler.graphqlHandler
     events:
       - http:
           path: graphql

@@ -10,7 +10,7 @@ const db = knex({
     database: 'tempdb',
     options: {
       encrypt: false,
-      trustServerCertificate: true,
+    //   trustServerCertificate: true,
       trustedConnection: true
     },
   },
