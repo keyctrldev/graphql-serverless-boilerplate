@@ -1,6 +1,8 @@
 import knex from 'knex';
 
 // Initialize Knex connection to SQL Server
+// The below hardcoded credentials are for quick local development.
+// TODO: Move them environment variables and secrets later
 const db = knex({
   client: 'mssql',
   connection: {
@@ -9,9 +11,7 @@ const db = knex({
     password: 'P@ssw0rd1',
     database: 'tempdb',
     options: {
-    //   encrypt: false,
-    //   trustServerCertificate: true,
-      trustedConnection: true
+      // trustedConnection: true
     },
   },
 });

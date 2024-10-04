@@ -9,6 +9,6 @@
     "outDir": "./dist",
     "strict": true
   },
-  "include": ["src/**/*", "codegen.ts", "dist/src/schema.graphql"],
+  "include": ["src/**/*", "codegen.ts", "/src/schema.graphql"],
   "exclude": ["node_modules"]
 }
