@@ -12,7 +12,19 @@ export const typeDefs = gql`
     memberId: String
   }
 
+  type User {
+    id: ID!
+    name: String!
+    userName: String!
+  }
+
   type Query {
     claims(memberId: String!): [Claim]
+    getUser(id: ID!): User
+    getUsers: [User]
+  }
+
+  type Mutation {
+    createUser(id: ID!, name: String!, userName: String!): User
   }
 `;
