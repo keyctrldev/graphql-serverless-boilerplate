@@ -1,11 +1,13 @@
 import { IResolvers } from "@graphql-tools/utils";
-import * as AWS from "aws-sdk";
+import { DynamoDB } from 'aws-sdk';
 
-const dynamoDB = new AWS.DynamoDB.DocumentClient({
+const dynamoDB = new DynamoDB.DocumentClient({
   region: "localhost",
   endpoint: "http://localhost:8000",
-  // accessKeyId: "myAccessKeyId", // Optional if using IAM roles or default credentials
-  // secretAccessKey: "mySecretAccessKey", // Optional
+  // This just hardcoded for quick testing
+  // TODO: this will be moved to secret store later
+  accessKeyId: "myAccessKeyId", // Optional if using IAM roles or default credentials
+  secretAccessKey: "mySecretAccessKey", // Optional
 });
 
 export const userResolver: IResolvers = {
