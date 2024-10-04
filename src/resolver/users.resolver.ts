@@ -1,18 +1,9 @@
 import { IResolvers } from "@graphql-tools/utils";
-import { DynamoDB } from 'aws-sdk';
-
-const dynamoDB = new DynamoDB.DocumentClient({
-  region: "localhost",
-  endpoint: "http://localhost:8000",
-  // This just hardcoded for quick testing
-  // TODO: this will be moved to secret store later
-  accessKeyId: "myAccessKeyId", // Optional if using IAM roles or default credentials
-  secretAccessKey: "mySecretAccessKey", // Optional
-});
+import { dynamoDB } from "../dynamodb";
 
 export const userResolver: IResolvers = {
   Query: {
-    getUser: async (_, { id ,}) => {
+    User: async (_, { id ,}) => {
       const params = {
         TableName: "Users",
         Key: { id },
@@ -33,7 +24,7 @@ export const userResolver: IResolvers = {
       return result.Item;
     },
 
-    getUsers: async () => {
+    Users: async () => {
       const params = {
         TableName: "Users",
       };
