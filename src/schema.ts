@@ -20,8 +20,8 @@ export const typeDefs = gql`
 
   type Query {
     claims(memberId: String!): [Claim]
-    getUser(id: ID!): User
-    getUsers: [User]
+    User(id: ID!): User
+    Users: [User]
   }
 
   type Mutation {
