@@ -35,8 +35,10 @@ export const userResolver: IResolvers = {
       const params = {
         TableName: "Users",
       };
-
-      const result = await dynamoDB.scan(params).promise();
+       const result = await dynamoDB.scan(params).promise();
+      if (!result.Items) {
+        return []; // Return an empty array if no items are found
+      };
       return result.Items; 
     },
   },
