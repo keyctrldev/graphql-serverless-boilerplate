@@ -1,0 +1,14 @@
+type Claim {
+  claimStatus: String
+  medicationName: String
+  claimId: String
+  claimDate: String
+  medicationCost: Int
+  planPaid: Int
+  memberPaid: Int
+  memberId: String
+}
+
+type Query {
+  claims(memberId: String!): [Claim]
+}

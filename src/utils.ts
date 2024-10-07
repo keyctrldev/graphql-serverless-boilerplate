@@ -10,6 +10,7 @@ const USER_POOL_ID = POOL_DATA.COGNITO_USER_POOL_ID!;
 export const generateHash = (username: string):string =>{ 
      const hasher = createHmac('sha256', CLIENT_SECRET);
      hasher.update(username + CLIENT_ID);
-     const secretHash = hasher.digest('base64');  
+     const secretHash = hasher.digest('base64');
+  
      return secretHash
 }
