@@ -76,7 +76,7 @@ type Query {
     state: String
   ): CognitoUser
 
-  signIn(username: String!, password: String!): Tokens
+  signIn(username: String!, password: String!): SignInResponse
 
   signOut(token: String!): SignOutResponse
 }

@@ -68,7 +68,7 @@ export type Query = {
   User?: Maybe<User>;
   Users?: Maybe<Array<Maybe<User>>>;
   claims?: Maybe<Array<Maybe<Claim>>>;
-  signIn?: Maybe<Tokens>;
+  signIn?: Maybe<SignInResponse>;
   signOut?: Maybe<SignOutResponse>;
   signUp?: Maybe<CognitoUser>;
 };
@@ -289,7 +289,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   User?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   Users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   claims?: Resolver<Maybe<Array<Maybe<ResolversTypes['Claim']>>>, ParentType, ContextType, RequireFields<QueryClaimsArgs, 'memberId'>>;
-  signIn?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType, RequireFields<QuerySignInArgs, 'password' | 'username'>>;
+  signIn?: Resolver<Maybe<ResolversTypes['SignInResponse']>, ParentType, ContextType, RequireFields<QuerySignInArgs, 'password' | 'username'>>;
   signOut?: Resolver<Maybe<ResolversTypes['SignOutResponse']>, ParentType, ContextType, RequireFields<QuerySignOutArgs, 'token'>>;
   signUp?: Resolver<Maybe<ResolversTypes['CognitoUser']>, ParentType, ContextType, RequireFields<QuerySignUpArgs, 'email' | 'firstName' | 'lastName' | 'password' | 'username'>>;
 };
