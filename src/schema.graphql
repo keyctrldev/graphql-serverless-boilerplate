@@ -9,6 +9,59 @@ type Claim {
   memberId: String
 }
 
+type User {
+  username: String!
+  email: String!
+  memberId: String
+  groupNumber: String
+  dob: String
+  firstName: String!
+  lastName: String!
+  insuranceProvider: String
+  mobileNumber: String
+  streetAddress: String
+  apartmentNumber: String
+  zipCode: String
+  city: String
+  state: String
+  UserConfirmed: Boolean
+  UserSub: String
+}
+
+type Tokens {
+  accessToken: String
+  idToken: String
+  refreshToken: String
+}
+
+scalar JSON
+type SignOutResponse {
+  message: String!
+  error: JSON
+}
+
 type Query {
   claims(memberId: String!): [Claim]
+
+  signUp(
+    username: String!
+    password: String!
+    email: String!
+    memberId: String
+    groupNumber: String
+    dob: String
+    firstName: String!
+    lastName: String!
+    insuranceProvider: String
+    mobileNumber: String
+    streetAddress: String
+    apartmentNumber: String
+    zipCode: String
+    city: String
+    state: String
+  ): User
+
+  signIn(username: String!, password: String!): Tokens
+
+  signOut(token: String!): SignOutResponse
 }

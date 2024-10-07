@@ -1,19 +1,15 @@
-import { LogoutArgs, LogoutResponse, SignInArgs, SignInResponse, SignUpArgs, User } from "../models/users.model";
-import { IResolvers } from '@graphql-tools/utils';
 import AWS from 'aws-sdk';
 import { generateHash } from "../utils";
 import { POOL_DATA } from "../constants";
+import { QuerySignUpArgs,User,QuerySignInArgs,Tokens } from "../types";
 
 
+AWS.config.update({ region: 'us-east-1' });   
 
-
-  AWS.config.update({ region: 'us-east-1' });   
-
-  export const userResolver:IResolvers = {
+export const userResolver = {
     Query: {
-        
-        signUp: async (_: any, args: SignUpArgs): Promise<void | User> => {
-            try {
+        signUp: async (_: any, args: QuerySignUpArgs): Promise<void | User> => {
+       
           const {
             username,
             password,
@@ -55,7 +51,7 @@ import { POOL_DATA } from "../constants";
             { Name: 'custom:state', Value: state || '' },
           ].filter(attr => attr.Value);
     
-         
+          try {
           const response = await cognito
             .signUp({
               ClientId: POOL_DATA.COGNITO_APP_CLIENT_ID,
@@ -86,48 +82,10 @@ import { POOL_DATA } from "../constants";
             UserSub:response.UserSub
           };
         }catch(err){
-            console.log(err)
+            console.log(err);
+            return;
         }
-        },
-        signIn: async (_: any, args: SignInArgs): Promise<SignInResponse> => {
-            const { username, password } = args;
-            const cognito = new AWS.CognitoIdentityServiceProvider();
-            const secretHash =  generateHash(username)
-            const response = await cognito
-              .initiateAuth({
-                AuthFlow: "USER_PASSWORD_AUTH",
-                AuthParameters: { USERNAME: username, PASSWORD: password, SECRET_HASH: secretHash },
-                ClientId: POOL_DATA.COGNITO_APP_CLIENT_ID,
-              })
-              .promise();
-      
-            // Extract tokens from the response
-            const { AccessToken, IdToken, RefreshToken } = response.AuthenticationResult || {};
-      
-            return {
-              accessToken: AccessToken,
-              idToken: IdToken,
-              refreshToken: RefreshToken,
-              message: "User successfully authenticated!",
-              customData: response as unknown as Record<string, unknown>,
-            };
-        },
-        // logout: async (_: any, args: LogoutArgs): Promise<LogoutResponse> => {
-        //     const { token } = args;
-        //     let data: LogoutResponse = { message: '', error: null };
-      
-        //     try {
-        //       const cognito = new AWS.CognitoIdentityServiceProvider();
-        //       await cognito.globalSignOut({ AccessToken: token }).promise();
-        //       data.message = "User successfully logged out!";
-        //     } catch (err) {
-        //       console.error(err);
-        //       data.message = "Error during logout.";
-        //       data.error = err as unknown as Record<string, unknown>;
-        //     }
-      
-        //     return data;
-        //   }
+        }
       }
   }
   
