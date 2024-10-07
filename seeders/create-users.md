@@ -4,27 +4,33 @@
             {
                 "PutRequest": {
                     "Item": {
-                        "id": {"N": "1"},
-                        "name": {"S": "Alice"},
-                        "userName": {"S": "alice123"}
+                        "id": {"S": "1"},
+                        "firstName": {"S": "John"},
+                        "lastName": {"S": "Doe"},
+                        "email": {"S": "john.doe@gmail.com"}
+                        "phone": {"S": "+91 1785265552"}
                     }
                 }
             },
             {
                 "PutRequest": {
                     "Item": {
-                        "id": {"N": "2"},
-                        "name": {"S": "Bob"},
-                        "userName": {"S": "bob456"}
+                        "id": {"S": "2"},
+                        "firstName": {"S": "James"},
+                        "lastName": {"S": "Smith"},
+                        "email": {"S": "james.smith@gmail.com"}
+                        "phone": {"S": "+91 1785265552"}
                     }
                 }
             },
             {
                 "PutRequest": {
                     "Item": {
-                        "id": {"N": "3"},
-                        "name": {"S": "Charlie"},
-                        "userName": {"S": "charlie789"}
+                        "id": {"S": "3"},
+                        "firstName": {"S": "Jon"},
+                        "lastName": {"S": "Jon"},
+                        "email": {"S": "jon.jon@gmail.com"}
+                        "phone": {"S": "+91 1785265552"}
                     }
                 }
             }

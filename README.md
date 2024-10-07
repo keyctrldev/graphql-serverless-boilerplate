@@ -62,7 +62,7 @@ Docker desktop
         aws dynamodb create-table --table-name <TABLE_NAME>  --attribute-definitions AttributeName=id,AttributeType=<S | N | B> --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput  ReadCapacityUnits=5,WriteCapacityUnits=5  --endpoint-url <ENDPOINT_URL>
     ``` 
     Ex: 
-    aws dynamodb create-table --table-name Users  --attribute-definitions AttributeName=id,AttributeType=N --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput  ReadCapacityUnits=5,WriteCapacityUnits=5  --endpoint-url http://localhost:8000
+    aws dynamodb create-table --table-name Users  --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput  ReadCapacityUnits=5,WriteCapacityUnits=5  --endpoint-url http://localhost:8000
 
     running the above command will create a table in the database
 3. Run the seeder scripts in "seeders" folder to add data into the tables.

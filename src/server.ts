@@ -1,8 +1,11 @@
-import { ApolloServer } from 'apollo-server-lambda';
-import { typeDefs } from './schema';
-import { claimResolver } from './resolver/claims.resolver';
-import { userResolver } from './resolver/users.resolver'
+import { ApolloServer } from 'apollo-server-lambda';;
+import claimResolver from './resolver/claims.resolver';
+import { userResolver } from './resolver/users.resolver';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
+// Read the GraphQL schema
+const typeDefs = readFileSync(join(__dirname, '/schema.graphql'), 'utf-8');
 
 // Apollo Server instance creation
 export const server = new ApolloServer({
