@@ -113,6 +113,13 @@ export type QuerySignUpArgs = {
   zipCode?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type SignInResponse = {
+  __typename?: 'SignInResponse';
+  customData?: Maybe<Scalars['JSON']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  tokens?: Maybe<Tokens>;
+};
+
 export type SignOutResponse = {
   __typename?: 'SignOutResponse';
   error?: Maybe<Scalars['JSON']['output']>;
@@ -214,6 +221,7 @@ export type ResolversTypes = {
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  SignInResponse: ResolverTypeWrapper<SignInResponse>;
   SignOutResponse: ResolverTypeWrapper<SignOutResponse>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Tokens: ResolverTypeWrapper<Tokens>;
@@ -230,6 +238,7 @@ export type ResolversParentTypes = {
   JSON: Scalars['JSON']['output'];
   Mutation: {};
   Query: {};
+  SignInResponse: SignInResponse;
   SignOutResponse: SignOutResponse;
   String: Scalars['String']['output'];
   Tokens: Tokens;
@@ -285,6 +294,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   signUp?: Resolver<Maybe<ResolversTypes['CognitoUser']>, ParentType, ContextType, RequireFields<QuerySignUpArgs, 'email' | 'firstName' | 'lastName' | 'password' | 'username'>>;
 };
 
+export type SignInResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignInResponse'] = ResolversParentTypes['SignInResponse']> = {
+  customData?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SignOutResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignOutResponse'] = ResolversParentTypes['SignOutResponse']> = {
   error?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -313,6 +329,7 @@ export type Resolvers<ContextType = any> = {
   JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SignInResponse?: SignInResponseResolvers<ContextType>;
   SignOutResponse?: SignOutResponseResolvers<ContextType>;
   Tokens?: TokensResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

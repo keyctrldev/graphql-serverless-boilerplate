@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-import { generateHash } from "../utils";
+import { generateHash } from "../utilities/cognito.util";
 import { POOL_DATA } from "../constants";
 import { QuerySignUpArgs, CognitoUser } from "../types";
 

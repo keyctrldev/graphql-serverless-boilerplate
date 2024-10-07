@@ -1,7 +1,6 @@
 import AWS from 'aws-sdk';
-import { LogoutArgs, SignInResponse } from "../models/authentication.model";
-import { QuerySignOutArgs,SignOutResponse, QuerySignInArgs } from "../types";
-import { generateHash } from "../utils";
+import { QuerySignOutArgs,SignOutResponse, QuerySignInArgs,SignInResponse } from "../types";
+import { generateHash } from "../utilities/cognito.util";
 import { POOL_DATA } from '../constants';
 
 
@@ -24,9 +23,11 @@ export const authenticationResolver = {
             const { AccessToken, IdToken, RefreshToken } = response.AuthenticationResult || {};
       
             return {
+              tokens:{
               accessToken: AccessToken,
               idToken: IdToken,
-              refreshToken: RefreshToken,
+              refreshToken: RefreshToken
+            },
               message: "User successfully authenticated!",
               customData: response as unknown as Record<string, unknown>,
             };

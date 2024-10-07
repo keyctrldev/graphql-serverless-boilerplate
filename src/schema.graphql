@@ -36,6 +36,11 @@ type Tokens {
 }
 
 scalar JSON
+type SignInResponse {
+  message: String
+  customData: JSON
+  tokens: Tokens
+}
 type SignOutResponse {
   message: String!
   error: JSON
