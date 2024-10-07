@@ -21,11 +21,11 @@ export type Claim = {
   claimDate?: Maybe<Scalars['String']['output']>;
   claimId?: Maybe<Scalars['String']['output']>;
   claimStatus?: Maybe<Scalars['String']['output']>;
-  medicationCost?: Maybe<Scalars['Float']['output']>;
+  medicationCost?: Maybe<Scalars['Int']['output']>;
   medicationName?: Maybe<Scalars['String']['output']>;
   memberId?: Maybe<Scalars['String']['output']>;
-  memberPaid?: Maybe<Scalars['Float']['output']>;
-  planPaid?: Maybe<Scalars['Float']['output']>;
+  memberPaid?: Maybe<Scalars['Int']['output']>;
+  planPaid?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Mutation = {
@@ -141,8 +141,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Claim: ResolverTypeWrapper<Claim>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -153,8 +153,8 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Claim: Claim;
-  Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -165,11 +165,11 @@ export type ClaimResolvers<ContextType = any, ParentType extends ResolversParent
   claimDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   claimId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   claimStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  medicationCost?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  medicationCost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   medicationName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   memberId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  memberPaid?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  planPaid?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  memberPaid?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  planPaid?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

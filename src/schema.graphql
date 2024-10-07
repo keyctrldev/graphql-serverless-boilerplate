@@ -3,9 +3,9 @@ type Claim {
   medicationName: String
   claimId: String
   claimDate: String
-  medicationCost: INT
-  planPaid: INT
-  memberPaid: INT
+  medicationCost: Int
+  planPaid: Int
+  memberPaid: Int
   memberId: String
 }
 
