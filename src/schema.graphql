@@ -9,6 +9,26 @@ type Claim {
   memberId: String
 }
 
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+}
+
 type Query {
   claims(memberId: String!): [Claim]
+  User(id: ID!): User
+  Users: [User]
+}
+
+type Mutation {
+  createUser(
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    phone: String!
+  ): User
 }

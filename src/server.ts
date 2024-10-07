@@ -1,5 +1,6 @@
 import { ApolloServer } from 'apollo-server-lambda';;
 import claimResolver from './resolver/claims.resolver';
+import { userResolver } from './resolver/users.resolver';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -9,7 +10,7 @@ const typeDefs = readFileSync(join(__dirname, '/schema.graphql'), 'utf-8');
 // Apollo Server instance creation
 export const server = new ApolloServer({
   typeDefs,
-  resolvers: claimResolver,
+  resolvers: [claimResolver, userResolver],
   introspection: process.env.NODE_ENV !== 'production',
 //   playground: process.env.NODE_ENV !== 'production',
 });
