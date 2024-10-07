@@ -9,7 +9,8 @@ type Claim {
   memberId: String
 }
 
-type User {
+# This object specifically users aws cognito for user signup so named it cognito user 
+type CognitoUser {
   username: String!
   email: String!
   memberId: String
@@ -40,9 +41,18 @@ type SignOutResponse {
   error: JSON
 }
 
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+}
+
 type Query {
   claims(memberId: String!): [Claim]
-
+  User(id: ID!): User
+  Users: [User]
   signUp(
     username: String!
     password: String!
@@ -59,9 +69,19 @@ type Query {
     zipCode: String
     city: String
     state: String
-  ): User
+  ): CognitoUser
 
   signIn(username: String!, password: String!): Tokens
 
   signOut(token: String!): SignOutResponse
+}
+
+type Mutation {
+  createUser(
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    phone: String!
+  ): User
 }

@@ -1,91 +1,58 @@
-import AWS from 'aws-sdk';
-import { generateHash } from "../utils";
-import { POOL_DATA } from "../constants";
-import { QuerySignUpArgs,User,QuerySignInArgs,Tokens } from "../types";
-
-
-AWS.config.update({ region: 'us-east-1' });   
+import { dynamoDB } from "../dynamodb";
+import { User } from "../types";
 
 export const userResolver = {
-    Query: {
-        signUp: async (_: any, args: QuerySignUpArgs): Promise<void | User> => {
-       
-          const {
-            username,
-            password,
-            email,
-            memberId,
-            groupNumber,
-            dob,
-            firstName,
-            lastName,
-            insuranceProvider,
-            mobileNumber,
-            streetAddress,
-            apartmentNumber,
-            zipCode,
-            city,
-            state,
-          } = args;
-          
-          const cognito = new AWS.CognitoIdentityServiceProvider();
-    
-          // Generate the SecretHash
-         
-          const secretHash = generateHash(username);
-    
-          // Create an array of Cognito UserAttributes
-          const userAttributes = [
-            { Name: 'email', Value: email },
-            { Name: 'given_name', Value: firstName },
-            { Name: 'family_name', Value: lastName },
-            { Name: 'custom:memberId', Value: memberId || '' },
-            { Name: 'custom:groupNumber', Value: groupNumber || '' },
-            { Name: 'custom:dob', Value: dob || '' },
-            { Name: 'custom:insuranceProvider', Value: insuranceProvider || '' },
-            { Name: 'custom:mobileNumber', Value: mobileNumber || '' },
-            { Name: 'custom:streetAddress', Value: streetAddress || '' },
-            { Name: 'custom:apartmentNumber', Value: apartmentNumber || '' },
-            { Name: 'custom:zipCode', Value: zipCode || '' },
-            { Name: 'custom:city', Value: city || '' },
-            { Name: 'custom:state', Value: state || '' },
-          ].filter(attr => attr.Value);
-    
-          try {
-          const response = await cognito
-            .signUp({
-              ClientId: POOL_DATA.COGNITO_APP_CLIENT_ID,
-              Username: username,
-              Password: password,
-              SecretHash: secretHash,
-              UserAttributes: userAttributes,
-            })
-            .promise();
-    
-         
-          return {
-            username,
-            email,
-            memberId,
-            groupNumber,
-            dob,
-            firstName,
-            lastName,
-            insuranceProvider,
-            mobileNumber,
-            streetAddress,
-            apartmentNumber,
-            zipCode,
-            city,
-            state,
-            UserConfirmed:response.UserConfirmed,
-            UserSub:response.UserSub
-          };
-        }catch(err){
-            console.log(err);
-            return;
-        }
-        }
-      }
-  }
+  Query: {
+    User: async (_:any, { id }:{id:String}) => {
+      const params = {
+        TableName: "Users",
+        Key: { id },
+      };
   
+      const result = await dynamoDB.get(params).promise();
+  
+      // If no user is found, throw an error or return null
+      if (!result.Item) {
+        throw new Error(`User with ID ${id} not found`);
+      }
+  
+      // Ensure that the 'id' field is present
+      if (!result.Item.id) {
+        throw new Error(`User 'id' field is missing for ID ${id}`);
+      }
+  
+      return result.Item;
+    },
+
+    Users: async () => {
+      const params = {
+        TableName: "Users",
+      };
+
+      const result = await dynamoDB.scan(params).promise();
+      return result.Items; 
+    },
+  },
+  Mutation: {
+    // Create a new user
+    createUser: async (_:any, { id, firstName, lastName, email, phone }:User) => {
+      const params = {
+        TableName: "Users",
+        Item: {
+          id,
+          firstName,
+          lastName,
+          email,
+          phone
+        },
+      };
+  
+      // Save the user to DynamoDB
+      await dynamoDB.put(params).promise();
+  
+      // Return the created user object
+      return params.Item;
+    },
+  },
+  
+};
