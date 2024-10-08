@@ -6,10 +6,10 @@ import knex from 'knex';
 const db = knex({
   client: 'mssql',
   connection: {
-    host: '127.0.0.1',
-    user: 'sa',
-    password: 'P@ssw0rd1',
-    database: 'tempdb',
+    host: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD,
+    database: process.env.SQL_DATABASE,
     options: {
       // trustedConnection: true
     },

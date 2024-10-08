@@ -10,6 +10,11 @@ provider:
   region: us-east-1
   environment:
     DYNAMODB_TABLE: Users
+    SQL_HOST: '127.0.0.1'
+    SQL_USER: 'sa'
+    # TODO: Move this to aws secret manager
+    SQL_PASSWORD: 'P@ssw0rd1'
+    SQL_DATABASE: 'tempdb'
   iam:
     role:
       statements:
