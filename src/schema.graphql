@@ -19,7 +19,7 @@ type CognitoUser {
   firstName: String!
   lastName: String!
   insuranceProvider: String
-  mobileNumber: String
+  mobileNumber: String!
   streetAddress: String
   apartmentNumber: String
   zipCode: String
@@ -27,6 +27,7 @@ type CognitoUser {
   state: String
   UserConfirmed: Boolean
   UserSub: String
+  passwordPolicy:JSON
 }
 
 type Tokens {
@@ -68,7 +69,7 @@ type Query {
     firstName: String!
     lastName: String!
     insuranceProvider: String
-    mobileNumber: String
+    mobileNumber: String!
     streetAddress: String
     apartmentNumber: String
     zipCode: String

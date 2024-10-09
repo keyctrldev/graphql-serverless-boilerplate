@@ -42,7 +42,8 @@ export type CognitoUser = {
   insuranceProvider?: Maybe<Scalars['String']['output']>;
   lastName: Scalars['String']['output'];
   memberId?: Maybe<Scalars['String']['output']>;
-  mobileNumber?: Maybe<Scalars['String']['output']>;
+  mobileNumber: Scalars['String']['output'];
+  passwordPolicy?: Maybe<Scalars['JSON']['output']>;
   state?: Maybe<Scalars['String']['output']>;
   streetAddress?: Maybe<Scalars['String']['output']>;
   username: Scalars['String']['output'];
@@ -105,7 +106,7 @@ export type QuerySignUpArgs = {
   insuranceProvider?: InputMaybe<Scalars['String']['input']>;
   lastName: Scalars['String']['input'];
   memberId?: InputMaybe<Scalars['String']['input']>;
-  mobileNumber?: InputMaybe<Scalars['String']['input']>;
+  mobileNumber: Scalars['String']['input'];
   password: Scalars['String']['input'];
   state?: InputMaybe<Scalars['String']['input']>;
   streetAddress?: InputMaybe<Scalars['String']['input']>;
@@ -269,7 +270,8 @@ export type CognitoUserResolvers<ContextType = any, ParentType extends Resolvers
   insuranceProvider?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   memberId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  mobileNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  mobileNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  passwordPolicy?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   streetAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -291,7 +293,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   claims?: Resolver<Maybe<Array<Maybe<ResolversTypes['Claim']>>>, ParentType, ContextType, RequireFields<QueryClaimsArgs, 'memberId'>>;
   signIn?: Resolver<Maybe<ResolversTypes['SignInResponse']>, ParentType, ContextType, RequireFields<QuerySignInArgs, 'password' | 'username'>>;
   signOut?: Resolver<Maybe<ResolversTypes['SignOutResponse']>, ParentType, ContextType, RequireFields<QuerySignOutArgs, 'token'>>;
-  signUp?: Resolver<Maybe<ResolversTypes['CognitoUser']>, ParentType, ContextType, RequireFields<QuerySignUpArgs, 'email' | 'firstName' | 'lastName' | 'password' | 'username'>>;
+  signUp?: Resolver<Maybe<ResolversTypes['CognitoUser']>, ParentType, ContextType, RequireFields<QuerySignUpArgs, 'email' | 'firstName' | 'lastName' | 'mobileNumber' | 'password' | 'username'>>;
 };
 
 export type SignInResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignInResponse'] = ResolversParentTypes['SignInResponse']> = {

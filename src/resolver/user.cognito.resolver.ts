@@ -43,7 +43,7 @@ export const cognitoUserResolver = {
             { Name: 'custom:groupNumber', Value: groupNumber || '' },
             { Name: 'custom:dob', Value: dob || '' },
             { Name: 'custom:insuranceProvider', Value: insuranceProvider || '' },
-            { Name: 'custom:mobileNumber', Value: mobileNumber || '' },
+            { Name: 'phone_number', Value: mobileNumber },
             { Name: 'custom:streetAddress', Value: streetAddress || '' },
             { Name: 'custom:apartmentNumber', Value: apartmentNumber || '' },
             { Name: 'custom:zipCode', Value: zipCode || '' },
@@ -62,7 +62,7 @@ export const cognitoUserResolver = {
             })
             .promise();
     
-         
+         const passwordPolicy = cognito.describeUserPool({UserPoolId:POOL_DATA.COGNITO_USER_POOL_ID}).promise();
           return {
             username,
             email,
@@ -79,7 +79,8 @@ export const cognitoUserResolver = {
             city,
             state,
             UserConfirmed:response.UserConfirmed,
-            UserSub:response.UserSub
+            UserSub:response.UserSub,
+            passwordPolicy
           };
         }catch(err){
             console.log(err);
