@@ -41,6 +41,14 @@ export type MutationCreateUserArgs = {
   lastName: Scalars['String']['input'];
   phone: Scalars['String']['input'];
 };
+export type MutationUpdateUserArgs = {
+  id: string; // or ID
+  firstName?: string; // optional
+  lastName?: string; // optional
+  email?: string; // optional
+  phone?: string; // optional
+};
+
 
 export type Query = {
   __typename?: 'Query';
@@ -67,6 +75,7 @@ export type User = {
   lastName: Scalars['String']['output'];
   phone: Scalars['String']['output'];
 };
+
 
 
 
@@ -173,9 +182,25 @@ export type ClaimResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'firstName' | 'id' | 'lastName' | 'phone'>>;
+export type MutationResolvers<
+  ContextType = any, 
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = {
+  createUser?: Resolver<
+    Maybe<ResolversTypes['User']>, 
+    ParentType, 
+    ContextType, 
+    RequireFields<MutationCreateUserArgs, 'email' | 'firstName' | 'id' | 'lastName' | 'phone'>
+  >;
+  
+  updateUser?: Resolver<
+    Maybe<ResolversTypes['User']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateUserArgs, 'id' | 'email' | 'firstName' | 'lastName' | 'phone'>
+  >;
 };
+
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   User?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
