@@ -1,73 +1,127 @@
-import { userResolver } from '../resolver/users.resolver';
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GetItemCommand, PutItemCommand, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { userResolver } from './users.resolver';
 
-// Mock the DynamoDBClient
+// Mock the specific commands from the AWS SDK
 jest.mock('@aws-sdk/client-dynamodb', () => {
   return {
-    DynamoDBClient: jest.fn().mockImplementation(() => ({
-      send: jest.fn(),
-    })),
-    PutItemCommand: jest.fn(),
+    DynamoDBClient: jest.fn(),
     GetItemCommand: jest.fn(),
+    PutItemCommand: jest.fn(),
     ScanCommand: jest.fn(),
   };
 });
 
 describe('userResolver', () => {
-  let mockSend: jest.Mock;
+  let mockSend: jest.Mock<any, any, any> | null=null;
 
   beforeEach(() => {
-    // Access the mock created by jest.mock and assign it to mockSend
-    mockSend = (DynamoDBClient as jest.Mock).mock.instances[0].send;
+    mockSend = jest.fn();
+
+    // Create a mock implementation of the DynamoDBClient
+    (DynamoDBClient as jest.Mock).mockImplementation(() => {
+      return {
+        send: mockSend,
+      };
+    });
   });
+
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Mutation.createUser', () => {
-    it('should create a user and return it', async () => {
-      const mockInput = {
-        id: '123',
+  describe('Query: User', () => {
+    it('should fetch a user by ID', async () => {
+      const user = {
+        id: '1',
         firstName: 'John',
         lastName: 'Doe',
         email: 'john@example.com',
-        phone: '123-456-7890',
+        phone: '1234567890',
       };
-      const expectedResult = { ...mockInput };
+      // mockSend.mockResolvedValueOnce({ Item: marshall(user) });
 
-      // Mock the send method to resolve with an empty object
-      mockSend.mockResolvedValue({});
+      const result = await userResolver.Query.User({}, { id: '1' });
 
-      // Call the resolver
-      const result = await userResolver.Mutation.createUser({}, mockInput);
+      expect(mockSend).toHaveBeenCalledWith(
+        expect.any(GetItemCommand)
+      );
+      expect(result).toEqual(user);
+    });
 
-      // Assertions
-      expect(mockSend).toHaveBeenCalledWith(expect.any(PutItemCommand));
-      expect(result).toEqual(expectedResult);
+    it('should throw an error if user is not found', async () => {
+      // mockSend.mockResolvedValueOnce({});
+
+      await expect(userResolver.Query.User({}, { id: '1' })).rejects.toThrow(
+        'User with ID 1 not found'
+      );
     });
   });
 
-  describe('Mutation.updateUser', () => {
-    it('should update an existing user and return the updated user', async () => {
-      const mockInput = {
-        id: '123',
-        firstName: 'Jane',
+  describe('Query: Users', () => {
+    it('should fetch all users', async () => {
+      const users = [
+        {
+          id: '1',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          phone: '1234567890',
+        },
+        {
+          id: '2',
+          firstName: 'Jane',
+          lastName: 'Doe',
+          email: 'jane@example.com',
+          phone: '0987654321',
+        },
+      ];
+
+      // mockSend.mockResolvedValueOnce({ Items: users.map((user) => marshall(user)) });
+
+      const result = await userResolver.Query.Users();
+
+      expect(mockSend).toHaveBeenCalledWith(expect.any(ScanCommand));
+      expect(result).toEqual(users);
+    });
+  });
+
+  describe('Mutation: createUser', () => {
+    it('should create a user', async () => {
+      const user = {
+        id: '1',
+        firstName: 'John',
         lastName: 'Doe',
-        email: 'jane@example.com',
-        phone: '987-654-3210',
+        email: 'john@example.com',
+        phone: '1234567890',
       };
-      const expectedResult = { ...mockInput };
 
-      // Mock the send method to resolve with an empty object
-      mockSend.mockResolvedValue({});
+      const result = await userResolver.Mutation.createUser({}, user);
 
-      // Call the resolver
-      const result = await userResolver.Mutation.updateUser({}, mockInput);
+      expect(mockSend).toHaveBeenCalledWith(
+        expect.any(PutItemCommand)
+      );
+      expect(result).toEqual(user);
+    });
+  });
 
-      // Assertions
-      expect(mockSend).toHaveBeenCalledWith(expect.any(PutItemCommand));
-      expect(result).toEqual(expectedResult);
+  describe('Mutation: updateUser', () => {
+    it('should update a user', async () => {
+      const user = {
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+      };
+
+      const result = await userResolver.Mutation.updateUser({}, user);
+
+      expect(mockSend).toHaveBeenCalledWith(
+        expect.any(PutItemCommand)
+      );
+      expect(result).toEqual(user);
     });
   });
 });
