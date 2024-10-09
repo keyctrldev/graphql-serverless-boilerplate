@@ -14,10 +14,11 @@ jest.mock('@aws-sdk/client-dynamodb', () => {
 });
 
 describe('userResolver', () => {
-  let dynamoDB: DynamoDBClient;
+  let mockSend: jest.Mock;
 
   beforeEach(() => {
-    dynamoDB = new DynamoDBClient({ region: "local", endpoint: "http://localhost:8000" });
+    // Access the mock created by jest.mock and assign it to mockSend
+    mockSend = (DynamoDBClient as jest.Mock).mock.instances[0].send;
   });
 
   afterEach(() => {
@@ -26,7 +27,6 @@ describe('userResolver', () => {
 
   describe('Mutation.createUser', () => {
     it('should create a user and return it', async () => {
-      const mockSend = dynamoDB.send as jest.Mock; // Type assertion to jest.Mock
       const mockInput = {
         id: '123',
         firstName: 'John',
@@ -50,7 +50,6 @@ describe('userResolver', () => {
 
   describe('Mutation.updateUser', () => {
     it('should update an existing user and return the updated user', async () => {
-      const mockSend = dynamoDB.send as jest.Mock; // Type assertion to jest.Mock
       const mockInput = {
         id: '123',
         firstName: 'Jane',
