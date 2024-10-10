@@ -1,35 +1,30 @@
-import { DynamoDBClient, GetItemCommand, PutItemCommand, ScanCommand } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { userResolver } from './users.resolver';
-
-// Mock the specific commands from the AWS SDK
-jest.mock('@aws-sdk/client-dynamodb', () => {
-  return {
-    DynamoDBClient: jest.fn(),
-    GetItemCommand: jest.fn(),
-    PutItemCommand: jest.fn(),
-    ScanCommand: jest.fn(),
-  };
-});
+const { DynamoDB } = require('aws-sdk');
+const { userResolver } = require('./users.resolver');
 
 describe('userResolver', () => {
-  let mockSend: jest.Mock<any, any, any> | null=null;
+  const dynamoDB = new DynamoDB.DocumentClient({ region: 'us-east-1' });
 
-  beforeEach(() => {
-    mockSend = jest.fn();
+  beforeEach(async () => {
+    const scanParams = { TableName: 'Users' };
+    const data = await dynamoDB.scan(scanParams).promise();
 
-    // Create a mock implementation of the DynamoDBClient
-    (DynamoDBClient as jest.Mock).mockImplementation(() => {
-      return {
-        send: mockSend,
-      };
-    });
+    // const deleteRequests = data.Items?.map((item: { id: string }) => ({
+    //   DeleteRequest: {
+    //     Key: { id: item.id },
+    //   },
+    // }));
+
+    // if (deleteRequests && deleteRequests.length > 0) {
+    //   const deleteParams = {
+    //     RequestItems: {
+    //       'Users': deleteRequests,
+    //     },
+    //   };
+    //   await dynamoDB.batchWrite(deleteParams).promise();
+    // }
   });
 
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  // ... rest of your tests
 
   describe('Query: User', () => {
     it('should fetch a user by ID', async () => {
@@ -40,22 +35,20 @@ describe('userResolver', () => {
         email: 'john@example.com',
         phone: '1234567890',
       };
-      // mockSend.mockResolvedValueOnce({ Item: marshall(user) });
+
+      const putParams = {
+        TableName: 'Users',
+        Item: user,
+      };
+      await dynamoDB.put(putParams).promise();
 
       const result = await userResolver.Query.User({}, { id: '1' });
 
-      expect(mockSend).toHaveBeenCalledWith(
-        expect.any(GetItemCommand)
-      );
       expect(result).toEqual(user);
     });
 
     it('should throw an error if user is not found', async () => {
-      // mockSend.mockResolvedValueOnce({});
-
-      await expect(userResolver.Query.User({}, { id: '1' })).rejects.toThrow(
-        'User with ID 1 not found'
-      );
+      await expect(userResolver.Query.User({}, { id: '1' })).rejects.toThrow('User with ID 1 not found');
     });
   });
 
@@ -78,11 +71,17 @@ describe('userResolver', () => {
         },
       ];
 
-      // mockSend.mockResolvedValueOnce({ Items: users.map((user) => marshall(user)) });
+      const putParams = {
+        TableName: 'Users',
+        Item: users[0],
+      };
+      await dynamoDB.put(putParams).promise();
+
+      putParams.Item = users[1];
+      await dynamoDB.put(putParams).promise();
 
       const result = await userResolver.Query.Users();
 
-      expect(mockSend).toHaveBeenCalledWith(expect.any(ScanCommand));
       expect(result).toEqual(users);
     });
   });
@@ -99,10 +98,14 @@ describe('userResolver', () => {
 
       const result = await userResolver.Mutation.createUser({}, user);
 
-      expect(mockSend).toHaveBeenCalledWith(
-        expect.any(PutItemCommand)
-      );
+      const getParams = {
+        TableName: 'Users',
+        Key: { id: '1' },
+      };
+      const data = await dynamoDB.get(getParams).promise();
+
       expect(result).toEqual(user);
+      expect(data.Item).toEqual(user);
     });
   });
 
@@ -116,12 +119,27 @@ describe('userResolver', () => {
         phone: '1234567890',
       };
 
-      const result = await userResolver.Mutation.updateUser({}, user);
+      const putParams = {
+        TableName: 'Users',
+        Item: user,
+      };
+      await dynamoDB.put(putParams).promise();
 
-      expect(mockSend).toHaveBeenCalledWith(
-        expect.any(PutItemCommand)
-      );
-      expect(result).toEqual(user);
+      const updatedUser = {
+        ...user,
+        firstName: 'Jonathan',
+      };
+
+      const result = await userResolver.Mutation.updateUser({}, updatedUser);
+
+      const getParams = {
+        TableName: 'Users',
+        Key: { id: '1' },
+      };
+      const data = await dynamoDB.get(getParams).promise();
+
+      expect(result).toEqual(updatedUser);
+      expect(data.Item).toEqual(updatedUser);
     });
   });
 });
