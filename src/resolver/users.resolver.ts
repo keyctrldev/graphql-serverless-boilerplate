@@ -28,27 +28,12 @@ export const userResolver: IResolvers = {
       const params = {
         TableName: "Users",
       };
-       const result = await dynamoDB.scan(params).promise();
-      if (!result.Items) {
-        return []; // Return an empty array if no items are found
-      };
+
       return result.Items; 
     },
   },
   Mutation: {
     // Create a new user
-    createUser: async (_, { input }) => {
-      const params = {
-        TableName: "Users",
-        Item: {
-          id: input.id,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          email: input.email,
-          phone: input.phone,
-          medications: input.medications,
-        },
-      };
 
       // Save the user to DynamoDB
       await dynamoDB.put(params).promise();

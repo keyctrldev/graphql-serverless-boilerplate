@@ -41,13 +41,6 @@ export type MutationCreateUserArgs = {
   lastName: Scalars['String']['input'];
   phone: Scalars['String']['input'];
 };
-export type MutationUpdateUserArgs = {
-  id: string; // or ID
-  firstName?: string; // optional
-  lastName?: string; // optional
-  email?: string; // optional
-  phone?: string; // optional
-};
 
 
 export type Query = {
@@ -75,9 +68,6 @@ export type User = {
   lastName: Scalars['String']['output'];
   phone: Scalars['String']['output'];
 };
-
-
-
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -150,8 +140,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Claim: ResolverTypeWrapper<Claim>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+
+  
+  
+  
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -162,8 +154,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Claim: Claim;
-  Float: Scalars['Float']['output'];
-  ID: Scalars['ID']['output'];
+
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -181,26 +172,6 @@ export type ClaimResolvers<ContextType = any, ParentType extends ResolversParent
   planPaid?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-
-export type MutationResolvers<
-  ContextType = any, 
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
-> = {
-  createUser?: Resolver<
-    Maybe<ResolversTypes['User']>, 
-    ParentType, 
-    ContextType, 
-    RequireFields<MutationCreateUserArgs, 'email' | 'firstName' | 'id' | 'lastName' | 'phone'>
-  >;
-  
-  updateUser?: Resolver<
-    Maybe<ResolversTypes['User']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateUserArgs, 'id' | 'email' | 'firstName' | 'lastName' | 'phone'>
-  >;
-};
-
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   User?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;

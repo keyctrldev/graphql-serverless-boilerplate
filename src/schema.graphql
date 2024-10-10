@@ -21,6 +21,7 @@ type Query {
   claims(memberId: String!): [Claim]
   User(id: ID!): User
   Users: [User]
+
 }
 
 type Mutation {
