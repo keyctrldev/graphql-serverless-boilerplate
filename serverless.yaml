@@ -3,6 +3,7 @@ service: apollo-server-ts
 provider:
   name: aws
   runtime: nodejs20.x
+  timeout: 120
 
 functions:
   graphql:

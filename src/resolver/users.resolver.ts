@@ -35,15 +35,16 @@ export const userResolver: IResolvers = {
   },
   Mutation: {
     // Create a new user
-    createUser: async (_, { id, firstName, lastName, email, phone }) => {
+    createUser: async (_, { input }) => {
       const params = {
         TableName: "Users",
         Item: {
-          id,
-          firstName,
-          lastName,
-          email,
-          phone
+          id: input.id,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          email: input.email,
+          phone: input.phone,
+          medications: input.medications,
         },
       };
   

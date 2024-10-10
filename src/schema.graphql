@@ -15,6 +15,46 @@ type User {
   lastName: String!
   email: String!
   phone: String!
+  medications: [Medication!]
+}
+input MedicationInput {
+  medName: String!
+  quantity: Int!
+  refillDate: String!
+  priorAuth: PriorAuthInput!
+}
+
+input PriorAuthInput {
+  userId: String!
+  status: StatusInput!
+}
+
+input StatusInput {
+  status: String!
+}
+
+type Status {
+  status: String!
+}
+
+type PriorAuth {
+  userId: String!
+  status: Status!
+}
+
+type Medication {
+  medName: String!
+  quantity: Int!
+  refillDate: String!
+  priorAuth: PriorAuth!
+}
+input UserInput {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  medications: [MedicationInput!]
 }
 
 type Query {
@@ -24,11 +64,5 @@ type Query {
 }
 
 type Mutation {
-  createUser(
-    id: ID!
-    firstName: String!
-    lastName: String!
-    email: String!
-    phone: String!
-  ): User
+  createUser(input: UserInput!): User
 }

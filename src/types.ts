@@ -28,6 +28,21 @@ export type Claim = {
   planPaid?: Maybe<Scalars['Int']['output']>;
 };
 
+export type Medication = {
+  __typename?: 'Medication';
+  medName: Scalars['String']['output'];
+  priorAuth: PriorAuth;
+  quantity: Scalars['Int']['output'];
+  refillDate: Scalars['String']['output'];
+};
+
+export type MedicationInput = {
+  medName: Scalars['String']['input'];
+  priorAuth: PriorAuthInput;
+  quantity: Scalars['Int']['input'];
+  refillDate: Scalars['String']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createUser?: Maybe<User>;
@@ -35,11 +50,18 @@ export type Mutation = {
 
 
 export type MutationCreateUserArgs = {
-  email: Scalars['String']['input'];
-  firstName: Scalars['String']['input'];
-  id: Scalars['ID']['input'];
-  lastName: Scalars['String']['input'];
-  phone: Scalars['String']['input'];
+  input: UserInput;
+};
+
+export type PriorAuth = {
+  __typename?: 'PriorAuth';
+  status: Status;
+  userId: Scalars['String']['output'];
+};
+
+export type PriorAuthInput = {
+  status: StatusInput;
+  userId: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -59,13 +81,32 @@ export type QueryClaimsArgs = {
   memberId: Scalars['String']['input'];
 };
 
+export type Status = {
+  __typename?: 'Status';
+  status: Scalars['String']['output'];
+};
+
+export type StatusInput = {
+  status: Scalars['String']['input'];
+};
+
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
+  medications?: Maybe<Array<Medication>>;
   phone: Scalars['String']['output'];
+};
+
+export type UserInput = {
+  email: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+  lastName: Scalars['String']['input'];
+  medications?: InputMaybe<Array<MedicationInput>>;
+  phone: Scalars['String']['input'];
 };
 
 
@@ -143,10 +184,17 @@ export type ResolversTypes = {
   Claim: ResolverTypeWrapper<Claim>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Medication: ResolverTypeWrapper<Medication>;
+  MedicationInput: MedicationInput;
   Mutation: ResolverTypeWrapper<{}>;
+  PriorAuth: ResolverTypeWrapper<PriorAuth>;
+  PriorAuthInput: PriorAuthInput;
   Query: ResolverTypeWrapper<{}>;
+  Status: ResolverTypeWrapper<Status>;
+  StatusInput: StatusInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
+  UserInput: UserInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -155,10 +203,17 @@ export type ResolversParentTypes = {
   Claim: Claim;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Medication: Medication;
+  MedicationInput: MedicationInput;
   Mutation: {};
+  PriorAuth: PriorAuth;
+  PriorAuthInput: PriorAuthInput;
   Query: {};
+  Status: Status;
+  StatusInput: StatusInput;
   String: Scalars['String']['output'];
   User: User;
+  UserInput: UserInput;
 };
 
 export type ClaimResolvers<ContextType = any, ParentType extends ResolversParentTypes['Claim'] = ResolversParentTypes['Claim']> = {
@@ -173,8 +228,22 @@ export type ClaimResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MedicationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Medication'] = ResolversParentTypes['Medication']> = {
+  medName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  priorAuth?: Resolver<ResolversTypes['PriorAuth'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  refillDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'firstName' | 'id' | 'lastName' | 'phone'>>;
+  createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
+};
+
+export type PriorAuthResolvers<ContextType = any, ParentType extends ResolversParentTypes['PriorAuth'] = ResolversParentTypes['PriorAuth']> = {
+  status?: Resolver<ResolversTypes['Status'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -183,19 +252,28 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   claims?: Resolver<Maybe<Array<Maybe<ResolversTypes['Claim']>>>, ParentType, ContextType, RequireFields<QueryClaimsArgs, 'memberId'>>;
 };
 
+export type StatusResolvers<ContextType = any, ParentType extends ResolversParentTypes['Status'] = ResolversParentTypes['Status']> = {
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  medications?: Resolver<Maybe<Array<ResolversTypes['Medication']>>, ParentType, ContextType>;
   phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Claim?: ClaimResolvers<ContextType>;
+  Medication?: MedicationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  PriorAuth?: PriorAuthResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Status?: StatusResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 
