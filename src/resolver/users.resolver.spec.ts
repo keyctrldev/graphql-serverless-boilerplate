@@ -24,7 +24,7 @@ describe('userResolver', () => {
     // }
   });
 
-  // ... rest of your tests
+  
 
   describe('Query: User', () => {
     it('should fetch a user by ID', async () => {
