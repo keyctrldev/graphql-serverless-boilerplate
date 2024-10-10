@@ -9,7 +9,7 @@ export const userResolver: IResolvers = {
         Key: { id },
       };
   
-      const result = await dynamoDB.get(params).promise();
+      const result = await dynamoDB.get(params);
   
       // If no user is found, throw an error or return null
       if (!result.Item) {
@@ -28,30 +28,27 @@ export const userResolver: IResolvers = {
       const params = {
         TableName: "Users",
       };
-       const result = await dynamoDB.scan(params).promise();
-      if (!result.Items) {
-        return []; // Return an empty array if no items are found
-      };
+
+      const result = await dynamoDB.scan(params);
       return result.Items; 
     },
   },
   Mutation: {
     // Create a new user
-    createUser: async (_, { input }) => {
+    createUser: async (_, { id, firstName, lastName, email, phone }) => {
       const params = {
         TableName: "Users",
         Item: {
-          id: input.id,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          email: input.email,
-          phone: input.phone,
-          medications: input.medications,
+          id,
+          firstName,
+          lastName,
+          email,
+          phone
         },
       };
-
+  
       // Save the user to DynamoDB
-      await dynamoDB.put(params).promise();
+      await dynamoDB.put(params);
   
       // Return the created user object
       return params.Item;
