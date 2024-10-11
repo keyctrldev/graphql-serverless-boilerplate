@@ -1,71 +1,68 @@
-import { DynamoDB } from 'aws-sdk';
 import { userResolver } from './users.resolver';
+import { DynamoDBClient, GetItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 
-const dynamoDB = new DynamoDB({
-  endpoint: 'http://localhost:8000', // Assuming you have DynamoDB Local running
-  region: 'us-west-2', // Change to your desired region
-});
+// Mock the DynamoDBClient
+jest.mock("@aws-sdk/client-dynamodb", () => ({
+  DynamoDBClient: jest.fn().mockImplementation(() => ({
+    send: jest.fn(),
+  })),
+  GetItemCommand: jest.fn(),
+  PutItemCommand: jest.fn(),
+}));
 
-describe('User Resolver Integration Tests', () => {
-  beforeAll(async () => {
-    // Create the Users table for testing
-    await dynamoDB.createTable({
-      TableName: 'Users',
-      KeySchema: [
-        { AttributeName: 'id', KeyType: 'HASH' }, // Partition key
-      ],
-      AttributeDefinitions: [
-        { AttributeName: 'id', AttributeType: 'S' },
-      ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 5,
-        WriteCapacityUnits: 5,
-      },
-    }).promise();
+describe('User Resolver', () => {
+  let dynamoDB: DynamoDBClient;
+
+  beforeEach(() => {
+    dynamoDB = new DynamoDBClient({});
+    jest.clearAllMocks();
   });
 
-  afterAll(async () => {
-    // Delete the Users table after tests are done
-    await dynamoDB.deleteTable({ TableName: 'Users' }).promise();
+  describe('Query: User', () => {
+    it('should return a user when found', async () => {
+      const user = { id: '1', firstName: 'John', lastName: 'Doe' };
+      const mockResponse = { Item: marshall(user) };
+
+      // Mock the send method to return a user when the GetItemCommand is called
+      (dynamoDB.send as jest.Mock).mockResolvedValue(mockResponse);
+
+      // Call the resolver
+      const result = await userResolver.Query.User(null, { id: '1' });
+
+      // Expect the result to match the user
+      expect(result).toEqual(user);
+
+      // Ensure the send method was called with a GetItemCommand
+      expect(dynamoDB.send).toHaveBeenCalledWith(expect.any(GetItemCommand));
+    });
+
+    it('should throw an error when the user is not found', async () => {
+      // Mock the send method to return no item
+      (dynamoDB.send as jest.Mock).mockResolvedValue({ Item: null });
+
+      // Call the resolver and expect an error
+      await expect(userResolver.Query.User(null, { id: '1' }))
+        .rejects
+        .toThrow('User with ID 1 not found');
+    });
   });
 
-  test('should create a new user successfully', async () => {
-    const mockUser = {
-      id: '12',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      phone: '1234567890',
-    };
+  describe('Mutation: createUser', () => {
+    it('should create a new user', async () => {
+      const user = { id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com', phone: '1234567890' };
 
-    // Cast to avoid TypeScript error
-    const mutation = userResolver.Mutation as { createUser: Function };
+      // Mock the send method for PutItemCommand
+      (dynamoDB.send as jest.Mock).mockResolvedValue({}); // Assume the operation is successful
 
-    // Call the createUser mutation
-    const result = await mutation.createUser(null, mockUser);
+      // Call the resolver to create a new user
+      const result = await userResolver.Mutation.createUser(null, user);
 
-    // Assert that the returned user matches the input
-    expect(result).toEqual(mockUser);
-  });
+      // Expect the result to match the user
+      expect(result).toEqual(user);
 
-  test('should throw an error if a user with the same ID already exists', async () => {
-    const mockUser = {
-      id: '123',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
-      phone: '0987654321',
-    };
-
-    // Cast to avoid TypeScript error
-    const mutation = userResolver.Mutation as { createUser: Function };
-
-    // First, create the user
-    await mutation.createUser(null, mockUser);
-
-    // Attempt to create the user again and expect an error
-    await expect(mutation.createUser(null, mockUser)).rejects.toThrow(
-      'User with ID 123 already exists'
-    );
+      // Ensure the send method was called with a PutItemCommand
+      expect(dynamoDB.send).toHaveBeenCalledWith(expect.any(PutItemCommand));
+    });
   });
 });

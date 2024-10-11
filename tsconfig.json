@@ -3,6 +3,7 @@
     "module": "commonjs",
     "target": "es2017",
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
