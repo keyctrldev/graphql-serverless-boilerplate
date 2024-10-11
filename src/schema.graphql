@@ -29,9 +29,9 @@ type CognitoUser {
 scalar JSON
 type CognitoUserRegistrationResponse{
   username:String
-  UserConfirmed: Boolean
-  UserSub: String
-  CodeDeliveryDetails:JSON
+  userConfirmed: Boolean
+  userSub: String
+  codeDeliveryDetails:JSON
 }
 
 type CognitoUserConfirmationResponse {
@@ -40,8 +40,8 @@ type CognitoUserConfirmationResponse {
 }
 
 type CognitoUserConfirmation {
-ConfirmationCode:String!
-Username:String!
+confirmationCode:String!
+username:String!
 }
 
 type Tokens {
@@ -95,7 +95,7 @@ type Query {
 
   signOut(token: String!): SignOutResponse
 
-  comfirmCognitoUser(username:String!,ConfirmationCode:String!):CognitoUserConfirmationResponse
+  comfirmCognitoUser(username:String!,confirmationCode:String!):CognitoUserConfirmationResponse
 }
 
 type Mutation {

@@ -1,16 +1,15 @@
-import AWS from 'aws-sdk';
+import {CognitoIdentityProviderClient,SignUpCommand,ConfirmSignUpCommand} from '@aws-sdk/client-cognito-identity-provider';
 import { generateHash } from "../utilities/cognito/cognito.util";
 import { POOL_DATA } from "../constants";
 import { QuerySignUpArgs, CognitoUserRegistrationResponse, QueryComfirmCognitoUserArgs, CognitoUserConfirmationResponse } from "../types";
 import { CognitoError, handleCognitoError } from '../utilities/cognito/cognito.error';
-
-
-AWS.config.update({ region: 'us-east-1' });   
+   
 
 export const cognitoUserResolver = {
     Query: {
         signUp: async (_: any, args: QuerySignUpArgs): Promise<void | CognitoUserRegistrationResponse > => {
-       
+          console.log(args,"=================================");
+          
           const {
             username,
             password,
@@ -29,8 +28,8 @@ export const cognitoUserResolver = {
             state,
           } = args;
           
-          const cognito = new AWS.CognitoIdentityServiceProvider();
-    
+          const cognito = new CognitoIdentityProviderClient({region:'us-east-1'});
+         
           // Generate the SecretHash
          
           const secretHash = generateHash(username);
@@ -53,20 +52,19 @@ export const cognitoUserResolver = {
           ].filter(attr => attr.Value);
     
           try {
-          const response = await cognito
-            .signUp({
+            const command = new SignUpCommand({
               ClientId: POOL_DATA.COGNITO_APP_CLIENT_ID,
               Username: username,
               Password: password,
               SecretHash: secretHash,
               UserAttributes: userAttributes,
             })
-            .promise();
-            console.log(response,"----------------------------");
+          const response = await cognito.send(command)
           return {
-            UserConfirmed:response.UserConfirmed,
-            UserSub:response.UserSub,
-            CodeDeliveryDetails:response.CodeDeliveryDetails
+            username,
+            userConfirmed:response.UserConfirmed,
+            userSub:response.UserSub,
+            codeDeliveryDetails:response.CodeDeliveryDetails
           };
         }catch(err){
             console.log(err);
@@ -76,14 +74,14 @@ export const cognitoUserResolver = {
         comfirmCognitoUser: async(_:any,args:QueryComfirmCognitoUserArgs,):Promise<void | CognitoUserConfirmationResponse>=>{
           const {
             username,
-           ConfirmationCode
+           confirmationCode
           } = args;
 
-          const cognito = new AWS.CognitoIdentityServiceProvider();
+          const cognito = new CognitoIdentityProviderClient({region:'us-east-1'});
           const secretHash = generateHash(username);
-
+          const command = new ConfirmSignUpCommand({Username:username,ConfirmationCode:confirmationCode,ClientId:POOL_DATA.COGNITO_APP_CLIENT_ID,SecretHash:secretHash});
           try{
-            const response = await cognito.confirmSignUp({Username:username,ConfirmationCode,ClientId:POOL_DATA.COGNITO_APP_CLIENT_ID,SecretHash:secretHash}).promise();
+            const response = await cognito.send(command)
             console.log(response);
             return {status:200,message:"User confirmed"}
           }catch(err){

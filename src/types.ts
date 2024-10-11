@@ -31,8 +31,6 @@ export type Claim = {
 
 export type CognitoUser = {
   __typename?: 'CognitoUser';
-  UserConfirmed?: Maybe<Scalars['Boolean']['output']>;
-  UserSub?: Maybe<Scalars['String']['output']>;
   apartmentNumber?: Maybe<Scalars['String']['output']>;
   city?: Maybe<Scalars['String']['output']>;
   dob?: Maybe<Scalars['String']['output']>;
@@ -43,11 +41,30 @@ export type CognitoUser = {
   lastName: Scalars['String']['output'];
   memberId?: Maybe<Scalars['String']['output']>;
   mobileNumber: Scalars['String']['output'];
-  passwordPolicy?: Maybe<Scalars['JSON']['output']>;
   state?: Maybe<Scalars['String']['output']>;
   streetAddress?: Maybe<Scalars['String']['output']>;
   username: Scalars['String']['output'];
   zipCode?: Maybe<Scalars['String']['output']>;
+};
+
+export type CognitoUserConfirmation = {
+  __typename?: 'CognitoUserConfirmation';
+  confirmationCode: Scalars['String']['output'];
+  username: Scalars['String']['output'];
+};
+
+export type CognitoUserConfirmationResponse = {
+  __typename?: 'CognitoUserConfirmationResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['Int']['output']>;
+};
+
+export type CognitoUserRegistrationResponse = {
+  __typename?: 'CognitoUserRegistrationResponse';
+  codeDeliveryDetails?: Maybe<Scalars['JSON']['output']>;
+  userConfirmed?: Maybe<Scalars['Boolean']['output']>;
+  userSub?: Maybe<Scalars['String']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {
@@ -69,9 +86,10 @@ export type Query = {
   User?: Maybe<User>;
   Users?: Maybe<Array<Maybe<User>>>;
   claims?: Maybe<Array<Maybe<Claim>>>;
+  comfirmCognitoUser?: Maybe<CognitoUserConfirmationResponse>;
   signIn?: Maybe<SignInResponse>;
   signOut?: Maybe<SignOutResponse>;
-  signUp?: Maybe<CognitoUser>;
+  signUp?: Maybe<CognitoUserRegistrationResponse>;
 };
 
 
@@ -82,6 +100,12 @@ export type QueryUserArgs = {
 
 export type QueryClaimsArgs = {
   memberId: Scalars['String']['input'];
+};
+
+
+export type QueryComfirmCognitoUserArgs = {
+  confirmationCode: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 
@@ -217,6 +241,9 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Claim: ResolverTypeWrapper<Claim>;
   CognitoUser: ResolverTypeWrapper<CognitoUser>;
+  CognitoUserConfirmation: ResolverTypeWrapper<CognitoUserConfirmation>;
+  CognitoUserConfirmationResponse: ResolverTypeWrapper<CognitoUserConfirmationResponse>;
+  CognitoUserRegistrationResponse: ResolverTypeWrapper<CognitoUserRegistrationResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
@@ -234,6 +261,9 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Claim: Claim;
   CognitoUser: CognitoUser;
+  CognitoUserConfirmation: CognitoUserConfirmation;
+  CognitoUserConfirmationResponse: CognitoUserConfirmationResponse;
+  CognitoUserRegistrationResponse: CognitoUserRegistrationResponse;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
@@ -259,8 +289,6 @@ export type ClaimResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type CognitoUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['CognitoUser'] = ResolversParentTypes['CognitoUser']> = {
-  UserConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  UserSub?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   apartmentNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   dob?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -271,11 +299,30 @@ export type CognitoUserResolvers<ContextType = any, ParentType extends Resolvers
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   memberId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   mobileNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  passwordPolicy?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   streetAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   zipCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CognitoUserConfirmationResolvers<ContextType = any, ParentType extends ResolversParentTypes['CognitoUserConfirmation'] = ResolversParentTypes['CognitoUserConfirmation']> = {
+  confirmationCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CognitoUserConfirmationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CognitoUserConfirmationResponse'] = ResolversParentTypes['CognitoUserConfirmationResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CognitoUserRegistrationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CognitoUserRegistrationResponse'] = ResolversParentTypes['CognitoUserRegistrationResponse']> = {
+  codeDeliveryDetails?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  userConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  userSub?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -291,9 +338,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   User?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   Users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   claims?: Resolver<Maybe<Array<Maybe<ResolversTypes['Claim']>>>, ParentType, ContextType, RequireFields<QueryClaimsArgs, 'memberId'>>;
+  comfirmCognitoUser?: Resolver<Maybe<ResolversTypes['CognitoUserConfirmationResponse']>, ParentType, ContextType, RequireFields<QueryComfirmCognitoUserArgs, 'confirmationCode' | 'username'>>;
   signIn?: Resolver<Maybe<ResolversTypes['SignInResponse']>, ParentType, ContextType, RequireFields<QuerySignInArgs, 'password' | 'username'>>;
   signOut?: Resolver<Maybe<ResolversTypes['SignOutResponse']>, ParentType, ContextType, RequireFields<QuerySignOutArgs, 'token'>>;
-  signUp?: Resolver<Maybe<ResolversTypes['CognitoUser']>, ParentType, ContextType, RequireFields<QuerySignUpArgs, 'email' | 'firstName' | 'lastName' | 'mobileNumber' | 'password' | 'username'>>;
+  signUp?: Resolver<Maybe<ResolversTypes['CognitoUserRegistrationResponse']>, ParentType, ContextType, RequireFields<QuerySignUpArgs, 'email' | 'firstName' | 'lastName' | 'mobileNumber' | 'password' | 'username'>>;
 };
 
 export type SignInResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignInResponse'] = ResolversParentTypes['SignInResponse']> = {
@@ -328,6 +376,9 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = {
   Claim?: ClaimResolvers<ContextType>;
   CognitoUser?: CognitoUserResolvers<ContextType>;
+  CognitoUserConfirmation?: CognitoUserConfirmationResolvers<ContextType>;
+  CognitoUserConfirmationResponse?: CognitoUserConfirmationResponseResolvers<ContextType>;
+  CognitoUserRegistrationResponse?: CognitoUserRegistrationResponseResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
