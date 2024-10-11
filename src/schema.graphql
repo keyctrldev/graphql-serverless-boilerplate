@@ -25,9 +25,23 @@ type CognitoUser {
   zipCode: String
   city: String
   state: String
+}
+scalar JSON
+type CognitoUserRegistrationResponse{
+  username:String
   UserConfirmed: Boolean
   UserSub: String
-  passwordPolicy:JSON
+  CodeDeliveryDetails:JSON
+}
+
+type CognitoUserConfirmationResponse {
+  status:Int
+  message:String
+}
+
+type CognitoUserConfirmation {
+ConfirmationCode:String!
+Username:String!
 }
 
 type Tokens {
@@ -36,7 +50,7 @@ type Tokens {
   refreshToken: String
 }
 
-scalar JSON
+
 type SignInResponse {
   message: String
   customData: JSON
@@ -75,11 +89,13 @@ type Query {
     zipCode: String
     city: String
     state: String
-  ): CognitoUser
+  ): CognitoUserRegistrationResponse
 
   signIn(username: String!, password: String!): SignInResponse
 
   signOut(token: String!): SignOutResponse
+
+  comfirmCognitoUser(username:String!,ConfirmationCode:String!):CognitoUserConfirmationResponse
 }
 
 type Mutation {

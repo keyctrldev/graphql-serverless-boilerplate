@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 import { QuerySignOutArgs,SignOutResponse, QuerySignInArgs,SignInResponse } from "../types";
-import { generateHash } from "../utilities/cognito.util";
+import { generateHash } from "../utilities/cognito/cognito.util";
 import { POOL_DATA } from '../constants';
 
 
