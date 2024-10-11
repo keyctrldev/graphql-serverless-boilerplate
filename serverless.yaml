@@ -1,13 +1,43 @@
-service: apollo-server-ts
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: sharathtestorg
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: graphql-serverles-sample
+service: truerx-api
 
 provider:
   name: aws
   runtime: nodejs20.x
   timeout: 30
+  region: us-east-1
+  environment:
+    DYNAMODB_TABLE: Users
+    SQL_HOST: '127.0.0.1'
+    SQL_USER: 'sa'
+    # TODO: Move this to aws secret manager
+    SQL_PASSWORD: 'P@ssw0rd1'
+    SQL_DATABASE: 'tempdb'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+          Resource:
+            - arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/Users
+
+resources:
+  # DynamoDB
+  - ${file(./infra/dynamodb.yaml)}
 
 functions:
   graphql:
     handler: dist/src/handler.graphqlHandler
+    environment:
+      DYNAMODB_TABLE: Users
     events:
       - http:
           path: graphql
@@ -15,7 +45,19 @@ functions:
       - http:
           path: graphql
           method: get
-          # cors: true
+          cors: true
 
 plugins:
+  # - serverless-dynamodb-local
   - serverless-offline
+
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+    stages:
+      - dev

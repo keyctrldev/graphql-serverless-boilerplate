@@ -7,9 +7,7 @@ import { CognitoError, handleCognitoError } from '../utilities/cognito/cognito.e
 
 export const cognitoUserResolver = {
     Query: {
-        signUp: async (_: any, args: QuerySignUpArgs): Promise<void | CognitoUserRegistrationResponse > => {
-          console.log(args,"=================================");
-          
+        signUp: async (_: any, args: QuerySignUpArgs): Promise<void | CognitoUserRegistrationResponse > => {          
           const {
             username,
             password,
@@ -82,7 +80,6 @@ export const cognitoUserResolver = {
           const command = new ConfirmSignUpCommand({Username:username,ConfirmationCode:confirmationCode,ClientId:POOL_DATA.COGNITO_APP_CLIENT_ID,SecretHash:secretHash});
           try{
             const response = await cognito.send(command)
-            console.log(response);
             return {status:200,message:"User confirmed"}
           }catch(err){
             console.log(err);

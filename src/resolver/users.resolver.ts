@@ -9,7 +9,7 @@ export const userResolver = {
         Key: { id },
       };
   
-      const result = await dynamoDB.get(params).promise();
+      const result = await dynamoDB.get(params);
   
       // If no user is found, throw an error or return null
       if (!result.Item) {
@@ -29,7 +29,7 @@ export const userResolver = {
         TableName: "Users",
       };
 
-      const result = await dynamoDB.scan(params).promise();
+      const result = await dynamoDB.scan(params);
       return result.Items; 
     },
   },
@@ -48,7 +48,7 @@ export const userResolver = {
       };
   
       // Save the user to DynamoDB
-      await dynamoDB.put(params).promise();
+      await dynamoDB.put(params);
   
       // Return the created user object
       return params.Item;
