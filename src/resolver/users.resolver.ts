@@ -1,58 +1,65 @@
-import { IResolvers } from "@graphql-tools/utils";
-import { dynamoDB } from "../dynamodb";
+import { DynamoDB } from 'aws-sdk';
+import { IResolvers } from '@graphql-tools/utils';
+
+const dynamoDB = new DynamoDB.DocumentClient({
+  region: 'us-west-2',
+  endpoint: 'http://localhost:8000',
+});
 
 export const userResolver: IResolvers = {
   Query: {
-    User: async (_, { id ,}) => {
+    User: async (_, { id }) => {
       const params = {
-        TableName: "Users",
+        TableName: 'Users',
         Key: { id },
       };
-  
-      const result = await dynamoDB.get(params);
-  
-      // If no user is found, throw an error or return null
+
+      const result = await dynamoDB.get(params).promise();
+
       if (!result.Item) {
         throw new Error(`User with ID ${id} not found`);
       }
-  
-      // Ensure that the 'id' field is present
-      if (!result.Item.id) {
-        throw new Error(`User 'id' field is missing for ID ${id}`);
-      }
-  
+
       return result.Item;
     },
 
     Users: async () => {
       const params = {
-        TableName: "Users",
+        TableName: 'Users',
       };
 
-      const result = await dynamoDB.scan(params);
-      return result.Items; 
+      const result = await dynamoDB.scan(params).promise();
+      return result.Items;
     },
   },
   Mutation: {
-    // Create a new user
     createUser: async (_, { id, firstName, lastName, email, phone }) => {
-      const params = {
-        TableName: "Users",
+      // Check if the user already exists
+      const getParams = {
+        TableName: 'Users',
+        Key: { id },
+      };
+
+      const existingUser = await dynamoDB.get(getParams).promise();
+
+      if (existingUser.Item) {
+        // Throw an error if the user with the same ID already exists
+        throw new Error(`User with ID ${id} already exists`);
+      }
+
+      const putParams = {
+        TableName: 'Users',
         Item: {
           id,
           firstName,
           lastName,
           email,
-          phone
+          phone,
         },
       };
-  
-      // Save the user to DynamoDB
-      await dynamoDB.put(params);
-  
-      // Return the created user object
-      return params.Item;
+
+      await dynamoDB.put(putParams).promise();
+      return putParams.Item;
     },
   },
-  
 };
