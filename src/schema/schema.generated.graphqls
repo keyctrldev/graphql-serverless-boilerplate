@@ -1,0 +1,19 @@
+type Book {
+  id: ID!
+  isbn: String!
+}
+
+type Mutation {
+  markBookAsRead(id: ID!): Book!
+}
+
+type Query {
+  book(id: ID!): Book
+  user(id: ID!): User
+}
+
+type User {
+  fullname: String!
+  id: ID!
+  isAdmin: Boolean!
+}
