@@ -68,3 +68,28 @@ Docker desktop
 3. Run the seeder scripts in "seeders" folder to add data into the tables.
 
 NOTE: In the older versions of dynamodb, you can interact with local dynamodb on http://localhost:8000/shell/. but in newer versions this is depricated. you can either use AWS cli or Dynamodb GUI clients like 'https://github.com/Arattian/DynamoDb-GUI-Client' to interact with DB
+
+### 7. Retrieve Secrets From AWS secret manager
+Follow the below steps to retrieve secrets from secret manager locally
+
+# Prerequisites
+Docker desktop
+
+## Steps
+1. Download and Install AWS CLI and run the following command in terminal to see if aws is installed
+    ```bash
+        aws --versiom
+    ```bash
+
+2. Run the following command to add aws credential in your local machine
+    ```bash
+        aws configure
+    ```bash
+
+    After running the above command you'll be asked to enter your credential like AccessKey, secretAccessKey, Region
+
+once you pass the secrets, .aws/credentials file will be created and your secrets will be stored in the file
+
+# NOTE: 
+AWS lambda will automatically read your credentials based on the permissions added in serverless.yaml
+
