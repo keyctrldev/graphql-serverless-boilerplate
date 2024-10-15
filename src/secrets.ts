@@ -14,7 +14,10 @@ export const getSecret: any = async () => {
     };
     const command = new GetSecretValueCommand(params);
     const response = await client.send(command);
-    return response.SecretString;
+    if (response.SecretString) {
+        return JSON.parse(response.SecretString);
+    }
+    
   } catch (error) {
     return error;
   }
