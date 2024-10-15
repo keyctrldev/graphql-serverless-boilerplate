@@ -1,0 +1,68 @@
+# Schema for User Dashboard in Health Strategist App
+
+schema {
+  query: Query
+}
+
+# Queries to fetch user data
+type Query {
+  # Fetch user's plan benefits
+  planBenefits: PlanBenefits!
+
+  # Fetch user's medications
+  medications: [Medication!]!
+
+  # Fetch user's claims information
+  claims: [Claim!]!
+
+  # Fetcg best pharamcy prices for a given medicine
+  bestPharmacyPrices(medicineName: String!): [PharmacyPrice!]!
+
+  # Get eligible user benefits
+  userBenefits: [UserBenefit!]!
+}
+
+# Type representing the user's plan benefits
+type PlanBenefits {
+  deductible: Float!
+  outOfPocket: Float!
+  deductibleRemaining: Float!
+  outOfPocketRemaining: Float!
+}
+
+# Type representing an individual medication
+type Medication {
+  medicationName: String!
+  medicationCount: Int!
+  medicationDosage: String!
+  medicationSupply: String!
+  medicationImage: String
+}
+
+# Type representing an individual claim
+type Claim {
+  claimStatus: String!
+  medicationName: String!
+  claimId: ID!
+  claimDate: String!
+  medicationCost: Float!
+  planPaid: Float!
+  memberPaid: Float!
+}
+
+# Type representing pharmacy price information
+type PharmacyPrice {
+  pharmacyName: String!
+  pharmacyLogo: String
+  price: Float!
+  deliveryOption: String
+  distance: Float!
+}
+
+# Type representing user benefits
+type UserBenefit {
+  programName: String!
+  programImage: String!
+  programDescription: String
+  enrollStatus: String!
+}

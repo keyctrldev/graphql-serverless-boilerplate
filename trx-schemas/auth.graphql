@@ -1,0 +1,78 @@
+# Schema for the Health Strategist App
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+# Queries to fetch data
+type Query {
+  # Get personal information of a user to prepopulate on the mobile app. The user id is expected to be fetched from the token
+  userPersonalInfo: PersonalInfo!
+}
+
+type Mutation {
+  signUp(input: SignUpInput!): SignUpResponse!
+  signIn(email: String!, password: String!): AuthResponse!
+  confirmUser(email: String!, otp: String!): AuthResponse!
+}
+
+# Input object for sign-up mutation
+input SignUpInput {
+  memberId: ID!
+  groupNumber: String!
+  dob: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  insuranceProvider: String!
+  mobileNumber: String!
+  address: AddressInput!
+}
+
+# Input object for address information
+input AddressInput {
+  streetAddress: String!
+  apartmentNumber: String
+  zipCode: String!
+  city: String!
+  state: String!
+}
+
+# Response object for sign-up operation
+type SignUpResponse {
+  success: Boolean!
+  message: String!
+  memberId: ID!
+}
+
+# Response object for sign-in and OTP verification
+type AuthResponse {
+  success: Boolean!
+  message: String!
+  token: String
+}
+
+# Personal information structure returned by getPersonalInfo query
+type PersonalInfo {
+  memberId: ID!
+  groupNumber: String!
+  dob: String
+  firstName: String
+  lastName: String
+  email: String
+  insuranceProvider: String
+  mobileNumber: String
+  address: AddressInfo
+}
+
+
+# Address information structure
+type AddressInfo {
+  streetAddress: String!
+  apartmentNumber: String
+  zipCode: String!
+  city: String!
+  state: String!
+}
