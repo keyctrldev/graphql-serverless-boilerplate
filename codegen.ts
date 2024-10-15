@@ -7,4 +7,4 @@ const config: CodegenConfig = {
     'src/schema': defineConfig()
   }
 }
-export default config
+export default config

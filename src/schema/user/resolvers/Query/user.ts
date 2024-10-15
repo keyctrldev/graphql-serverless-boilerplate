@@ -1,7 +1,6 @@
+import type   { QueryResolvers } from './../../../types.generated';
 
-        import type   { QueryResolvers } from './../../../types.generated';
-
-        export const user: QueryResolvers['user'] = async (_, { id }, { dataSources }) => {
+        export const user: NonNullable<QueryResolvers['user']> = async (_, { id }, { dataSources }) => {
           return await dataSources.userAPI.getUserById(id);
         };
         

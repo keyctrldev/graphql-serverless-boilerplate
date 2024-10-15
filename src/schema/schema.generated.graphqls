@@ -1,19 +1,24 @@
 type Book {
+  author: String
   id: ID!
   isbn: String!
+  title: String
 }
 
 type Mutation {
-  markBookAsRead(id: ID!): Book!
+  markBookAsRead1(author: String!, id: ID!, isbn: String!, title: String!): Book
 }
 
 type Query {
-  book(id: ID!): Book
+  book(id1: ID!): Book
   user(id: ID!): User
 }
 
+type Qurey
+
 type User {
-  fullname: String!
+  email: String!
+  firstName: String!
   id: ID!
-  isAdmin: Boolean!
+  lastName: String!
 }

@@ -18,18 +18,23 @@ export type Scalars = {
 
 export type Book = {
   __typename?: 'Book';
+  author?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isbn: Scalars['String']['output'];
+  title?: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  markBookAsRead: Book;
+  markBookAsRead1?: Maybe<Book>;
 };
 
 
-export type MutationmarkBookAsReadArgs = {
+export type MutationmarkBookAsRead1Args = {
+  author: Scalars['String']['input'];
   id: Scalars['ID']['input'];
+  isbn: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -40,7 +45,7 @@ export type Query = {
 
 
 export type QuerybookArgs = {
-  id: Scalars['ID']['input'];
+  id1: Scalars['ID']['input'];
 };
 
 
@@ -48,11 +53,16 @@ export type QueryuserArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type Qurey = {
+  __typename?: 'Qurey';
+};
+
 export type User = {
   __typename?: 'User';
-  fullname: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  isAdmin: Scalars['Boolean']['output'];
+  lastName: Scalars['String']['output'];
 };
 
 
@@ -127,10 +137,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Book: ResolverTypeWrapper<Book>;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  Qurey: ResolverTypeWrapper<Qurey>;
   User: ResolverTypeWrapper<User>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
 };
@@ -138,33 +149,41 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Book: Book;
-  ID: Scalars['ID']['output'];
   String: Scalars['String']['output'];
+  ID: Scalars['ID']['output'];
   Mutation: {};
   Query: {};
+  Qurey: Qurey;
   User: User;
   Boolean: Scalars['Boolean']['output'];
 };
 
 export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = {
+  author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isbn?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  markBookAsRead?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationmarkBookAsReadArgs, 'id'>>;
+  markBookAsRead1?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationmarkBookAsRead1Args, 'author' | 'id' | 'isbn' | 'title'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QuerybookArgs, 'id'>>;
+  book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QuerybookArgs, 'id1'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserArgs, 'id'>>;
 };
 
+export type QureyResolvers<ContextType = any, ParentType extends ResolversParentTypes['Qurey'] = ResolversParentTypes['Qurey']> = {
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  fullname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -172,6 +191,7 @@ export type Resolvers<ContextType = any> = {
   Book?: BookResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Qurey?: QureyResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

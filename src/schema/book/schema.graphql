@@ -1,12 +1,15 @@
-extend type Query {
-  book(id: ID!): Book
+type Query {
+    book(id: ID!): Book
 }
 
 extend type Mutation {
-  markBookAsRead(id: ID!): Book!
+    markBookAsRead(id: ID!, title: String!, author: String!, isbn: String!): Book
 }
 
 type Book {
-  id: ID!
-  isbn: String!
+    id: ID!
+    title: String
+    author: String
+    isbn: String!
+    # other fields...
 }

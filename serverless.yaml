@@ -1,5 +1,5 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: sharathtestorg
+# org: sharathtestorg
 # "app" enables Serverless Framework Dashboard features and sharing them with other Services.
 app: graphql-serverles-sample
 service: truerx-api
@@ -8,6 +8,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
+  timeout: 120
   environment:
     DYNAMODB_TABLE: Users
     SQL_HOST: '127.0.0.1'
