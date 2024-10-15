@@ -31,8 +31,8 @@ export const authenticationResolver = {
               customData: response as unknown as Record<string, unknown>,
             };
         },
-        signOut: async (_: any, args: QuerySignOutArgs): Promise<SignOutResponse> => {
-            const { token } = args;
+        signOut: async (_: any, args: QuerySignOutArgs,context:any): Promise<SignOutResponse> => {
+            const { token } = context;
             let data: SignOutResponse = { message: '', error: null };
       
             try {
