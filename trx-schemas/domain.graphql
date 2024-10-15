@@ -13,7 +13,12 @@ type Query {
   medications: [Medication!]!
 
   # Fetch user's claims information
-  claims: [Claim!]!
+  claims(
+    userId: ID!, 
+    limit: Int, 
+    offset: Int, 
+    pastDays: Int
+  ): [Claim!]!
 
   # Fetcg best pharamcy prices for a given medicine
   bestPharmacyPrices(medicineName: String!): [PharmacyPrice!]!
