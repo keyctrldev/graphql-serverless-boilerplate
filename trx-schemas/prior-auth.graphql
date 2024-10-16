@@ -1,0 +1,31 @@
+schema {
+  query: Query
+}
+
+type Query {
+  PriorAuth(id: ID!): [PriorAuth!]
+}
+
+type PriorAuth {
+    medicationName: String!
+    medicationType: String!
+    medicationDosage: String!
+    medicationCount: String!
+    medicationImage: String
+    statusHistory: [StatusHistory!]!
+}
+
+type StatusHistory {
+    status: Status!
+    submittedBy: String!
+    dateTime: String!
+}
+
+enum Status {
+  request_recieved
+  under_review
+  review_completed
+  approved
+  denied
+}
+

@@ -25,6 +25,9 @@ type Query {
 
   # Get eligible user benefits
   userBenefits: [UserBenefit!]!
+
+  # Get Benificiaries
+  benificiary: [Benificiary!]
 }
 
 # Type representing the user's plan benefits
@@ -70,4 +73,8 @@ type UserBenefit {
   programImage: String!
   programDescription: String
   enrollStatus: String!
+}
+
+type Benificiary {
+  name: String!
 }

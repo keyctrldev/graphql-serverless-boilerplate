@@ -15,6 +15,7 @@ type Mutation {
   signUp(input: SignUpInput!): SignUpResponse!
   signIn(email: String!, password: String!): AuthResponse!
   confirmUser(email: String!, otp: String!): AuthResponse!
+  ResetPassword(email: String!, password: String!): ResetPwdResponse!
 }
 
 # Input object for sign-up mutation
@@ -52,6 +53,11 @@ type AuthResponse {
   success: Boolean!
   message: String!
   token: String
+}
+
+type ResetPwdResponse {
+  success: Boolean!
+  message: String!
 }
 
 # Personal information structure returned by getPersonalInfo query

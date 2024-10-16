@@ -1,0 +1,19 @@
+schema {
+  query: Query
+}
+
+type Query {
+  notifications: [Notification]
+  savings: [Savings]
+}
+
+type Notification {
+    message: String!
+    description: String!
+    notificationImage: String
+}
+
+type Savings {
+    message: String!
+    description: String!
+}
