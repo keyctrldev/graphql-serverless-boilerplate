@@ -19,8 +19,8 @@ type User {
 
 type Query {
   claims(memberId: String!): [Claim]
-  User(id: ID!): User
-  Users: [User]
+  user(id: ID!): User   # Changed User to user for better convention
+  users: [User]         # Changed Users to users for better convention
   book(id: ID!): Book
 }
 
@@ -39,14 +39,4 @@ type Mutation {
     email: String!
     phone: String!
   ): User
-   markBookAsRead(id: ID!, title: String!, author: String!, isbn: String!): Book
-}
-
-type Book {
-    id: ID!
-    title: String
-    author: String
-    isbn: String!
-    # other fields...
-}
-
+  

@@ -1,20 +1,31 @@
 type Book {
-  author: String
   id: ID!
   isbn: String!
-  title: String
+}
+
+type Claim {
+  claimDate: String
+  claimId: String
+  claimStatus: String
+  medicationCost: Int
+  medicationName: String
+  memberId: String
+  memberPaid: Int
+  planPaid: Int
 }
 
 type Mutation {
-  markBookAsRead1(author: String!, id: ID!, isbn: String!, title: String!): Book
+  createUser(email: String!, firstName: String!, id: ID!, lastName: String!): User
+  markBookAsRead(id: ID!): Book!
+  updateUser(email: String!, firstName: String!, id: ID!, lastName: String!): User
 }
 
 type Query {
-  book(id1: ID!): Book
+  book(id: ID!): Book
+  claims(memberId: String!): [Claim]
   user(id: ID!): User
+  users: [User]
 }
-
-type Qurey
 
 type User {
   email: String!

@@ -8,3 +8,7 @@ type User {
   lastName: String!
   email: String!
 }
+
+extend type Mutation {
+  createUser(id: ID!, firstName: String!, lastName: String!, email: String!): User
+}
