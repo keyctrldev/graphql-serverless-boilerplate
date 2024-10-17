@@ -28,7 +28,7 @@ type Mutation {
     id: ID!
     firstName: String!
     lastName: String!
-    email: String!
-    phone: String!
+    email: String! @constraint(format: "email")
+    phone: String! @constraint(minLength: 10, pattern: "^(\\\\+?[1-9]\\d{1,14})$")
   ): User
 }
