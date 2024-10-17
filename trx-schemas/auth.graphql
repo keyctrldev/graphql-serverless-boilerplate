@@ -8,7 +8,7 @@ schema {
 # Queries to fetch data
 type Query {
   # Get personal information of a user to prepopulate on the mobile app. The user id is expected to be fetched from the token
-  userPersonalInfo: PersonalInfo!
+  userProfileInfo: ProfileInfoResponse!
 }
 
 type Mutation {
@@ -45,14 +45,13 @@ input AddressInput {
 type SignUpResponse {
   success: Boolean!
   message: String!
-  memberId: ID!
 }
 
 # Response object for sign-in and OTP verification
 type AuthResponse {
   success: Boolean!
   message: String!
-  token: String
+  accessToken: String!
 }
 
 type ResetPasswordResponse {
@@ -61,7 +60,7 @@ type ResetPasswordResponse {
 }
 
 # Personal information structure returned by getPersonalInfo query
-type PersonalInfo {
+type ProfileInfoResponse {
   memberId: ID!
   groupNumber: String!
   dob: String
