@@ -1,20 +1,3 @@
-type Query {
-  claims(memberId: String!): [Claim]
-  users: [User]
-}
+type Query
 
-type Mutation {
-  updateUser(id: ID!, firstName: String!, lastName: String!, email: String!): User
-}
-
-# Define common types if needed
-type Claim {
-  claimStatus: String
-  medicationName: String
-  claimId: String
-  claimDate: String
-  medicationCost: Int
-  planPaid: Int
-  memberPaid: Int
-  memberId: String
-}
+type Mutation

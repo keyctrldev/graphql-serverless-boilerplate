@@ -1,11 +1,8 @@
 import type { QueryResolvers } from "./../../../types.generated";
-import { DynamoDB } from "aws-sdk";
+import {dynamoDB } from "../../../../dynamodb"
 import { User } from "./../../../types.generated"; // Adjust the import based on where your User type is defined
 
-const dynamoDB = new DynamoDB.DocumentClient({
-  region: "us-west-2",
-  endpoint: "http://localhost:8000",
-});
+
 
 // Resolver to fetch a user by ID
 export const user: NonNullable<QueryResolvers['user']> = async (_, { id }) => {
@@ -15,7 +12,7 @@ export const user: NonNullable<QueryResolvers['user']> = async (_, { id }) => {
   };
 
   // Fetch the user from DynamoDB
-  const result = await dynamoDB.get(params).promise();
+  const result = await dynamoDB.get(params);
 
   // Check if the user was found
   if (!result.Item) {

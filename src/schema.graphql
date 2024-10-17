@@ -30,14 +30,6 @@ type Mutation {
     firstName: String!
     lastName: String!
     email: String!
-    phone: String!
-  ): User
-  updateUser(
-    id: ID!
-    firstName: String!
-    lastName: String!
-    email: String!
-    phone: String!
   ): User
   }
   

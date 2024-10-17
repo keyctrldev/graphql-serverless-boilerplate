@@ -1,12 +1,6 @@
 import type   { MutationResolvers } from './../../../types.generated';
-import { DynamoDB } from 'aws-sdk';
-
+import {dynamoDB } from "../../../../dynamodb"
 // Initialize DynamoDB Document Client
-const dynamoDB = new DynamoDB.DocumentClient({
-  region: 'us-west-2',
-  endpoint: 'http://localhost:8000',
-});
-
 export const createUser: NonNullable<MutationResolvers['createUser']> = async (
     _parent,
     { id, firstName, lastName, email }
@@ -17,7 +11,7 @@ export const createUser: NonNullable<MutationResolvers['createUser']> = async (
       Key: { id },
     };
   
-    const existingUser = await dynamoDB.get(getParams).promise();
+    const existingUser = await dynamoDB.get(getParams);
   
     if (existingUser.Item) {
       throw new Error(`User with ID ${id} already exists`);
@@ -33,6 +27,6 @@ export const createUser: NonNullable<MutationResolvers['createUser']> = async (
       },
     };
   
-    await dynamoDB.put(putParams).promise();
+    await dynamoDB.put(putParams);
     return putParams.Item; // Return the newly created user
   };

@@ -8,8 +8,6 @@ import { join } from 'path';
 
 // Read the GraphQL schema
 const typeDefs = readFileSync(join(__dirname, '/schema.graphql'), 'utf-8');
-// const typeDefs= readFileSync(join(__dirname,'./schmea/base/schema.graphql'), 'utf-8');
-console.log(typeDefs) 
 // Apollo Server instance creation
 export const server = new ApolloServer({
   typeDefs,
