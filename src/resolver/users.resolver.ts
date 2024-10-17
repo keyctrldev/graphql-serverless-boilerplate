@@ -48,7 +48,7 @@ export const userResolver: IResolvers = {
       };
   
       // Save the user to DynamoDB
-      await dynamoDB.put(params);
+      // await dynamoDB.put(params);
   
       // Return the created user object
       return params.Item;
