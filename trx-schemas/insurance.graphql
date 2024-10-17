@@ -3,20 +3,20 @@ schema {
 }
 
 type Query {
-  insurance(memberId: ID!): Insurance!
+  insurance: Insurance!
 }
 
 type Insurance {
     memberId: ID!
     memberName: String!
     groupNumber: String!
-    RXBin: String!
-    PCN: String!
-    Copays: [Copay!]!
+    rxBin: String!
+    pcn: String!
+    coPays: [CoPay!]
 }
 
-type Copay {
+type CoPay {
     type: String!
     name: String!
-    amount: String!
+    amount: Float!
 }

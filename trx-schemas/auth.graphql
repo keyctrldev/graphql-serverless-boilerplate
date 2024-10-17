@@ -15,7 +15,7 @@ type Mutation {
   signUp(input: SignUpInput!): SignUpResponse!
   signIn(email: String!, password: String!): AuthResponse!
   confirmUser(email: String!, otp: String!): AuthResponse!
-  ResetPassword(email: String!, password: String!): ResetPwdResponse!
+  resetPassword(email: String!, password: String!): ResetPasswordResponse!
 }
 
 # Input object for sign-up mutation
@@ -55,7 +55,7 @@ type AuthResponse {
   token: String
 }
 
-type ResetPwdResponse {
+type ResetPasswordResponse {
   success: Boolean!
   message: String!
 }
