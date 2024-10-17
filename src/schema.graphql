@@ -21,7 +21,7 @@ type Query {
   claims(memberId: String!): [Claim]
   user(id: ID!): User   # Changed User to user for better convention
   users: [User]         # Changed Users to users for better convention
-  book(id: ID!): Book
+  
 }
 
 type Mutation {
@@ -39,4 +39,5 @@ type Mutation {
     email: String!
     phone: String!
   ): User
+  }
   
