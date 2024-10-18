@@ -16,6 +16,22 @@ type Mutation {
   signIn(email: String!, password: String!): AuthResponse!
   confirmUser(email: String!, otp: String!): AuthResponse!
   resetPassword(email: String!, password: String!): ResetPasswordResponse!
+  updateUserProfile(input: updateUserProfileInput!): updateUserProfileResponse!
+  lookUp(memberId: ID!, groupNumber: String, dob: String): lookUpResponse!
+}
+
+input updateUserProfileInput {
+  agreementAcceptance: String
+}
+
+type updateUserProfileResponse {
+  message: String!
+  success: Boolean!
+}
+
+type lookUpResponse {
+  message: String!
+  status: String!
 }
 
 # Input object for sign-up mutation

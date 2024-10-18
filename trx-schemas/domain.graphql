@@ -14,17 +14,14 @@ type Query {
 
   # Fetch user's claims information
   claims(
-    userId: ID!, 
     limit: Int, 
     offset: Int, 
-    pastDays: Int
+    startDate: Date,
+    endDate: Date
   ): [Claim!]!
 
   # Fetcg best pharamcy prices for a given medicine
   bestPharmacyPrices(medicineName: String!): [PharmacyPrice!]!
-
-  # Get eligible user benefits
-  userBenefits: [UserBenefit!]!
 
   # Get Benificiaries
   benificiary: [Benificiary!]
@@ -44,7 +41,6 @@ type Medication {
   medicationCount: Int!
   medicationDosage: String!
   medicationSupply: String!
-  medicationImage: String
 }
 
 # Type representing an individual claim
