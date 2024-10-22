@@ -1,6 +1,8 @@
 import { IResolvers } from "@graphql-tools/utils";
 import { dynamoDB } from "../dynamodb";
 
+
+
 export const userResolver: IResolvers = {
   Query: {
     User: async (_, { id ,}) => {
@@ -48,7 +50,7 @@ export const userResolver: IResolvers = {
       };
   
       // Save the user to DynamoDB
-      // await dynamoDB.put(params);
+      await dynamoDB.put(params);
   
       // Return the created user object
       return params.Item;
