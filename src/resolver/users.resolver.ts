@@ -1,9 +1,9 @@
-import { IResolvers } from "@graphql-tools/utils";
 import { dynamoDB } from "../dynamodb";
+import { User } from "../types";
 
-export const userResolver: IResolvers = {
+export const userResolver = {
   Query: {
-    User: async (_, { id ,}) => {
+    User: async (_:any, { id }:{id:String}) => {
       const params = {
         TableName: "Users",
         Key: { id },
@@ -35,7 +35,7 @@ export const userResolver: IResolvers = {
   },
   Mutation: {
     // Create a new user
-    createUser: async (_, { id, firstName, lastName, email, phone }) => {
+    createUser: async (_:any, { id, firstName, lastName, email, phone }:User) => {
       const params = {
         TableName: "Users",
         Item: {

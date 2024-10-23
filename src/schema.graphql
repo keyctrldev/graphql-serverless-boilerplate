@@ -9,6 +9,58 @@ type Claim {
   memberId: String
 }
 
+# This object specifically users aws cognito for user signup so named it cognito user 
+type CognitoUser {
+  username: String!
+  email: String!
+  memberId: String
+  groupNumber: String
+  dob: String
+  firstName: String!
+  lastName: String!
+  insuranceProvider: String
+  mobileNumber: String!
+  streetAddress: String
+  apartmentNumber: String
+  zipCode: String
+  city: String
+  state: String
+}
+scalar JSON
+type CognitoUserRegistrationResponse{
+  username:String
+  userConfirmed: Boolean
+  userSub: String
+  codeDeliveryDetails:JSON
+}
+
+type CognitoUserConfirmationResponse {
+  status:Int
+  message:String
+}
+
+type CognitoUserConfirmation {
+confirmationCode:String!
+username:String!
+}
+
+type Tokens {
+  accessToken: String
+  idToken: String
+  refreshToken: String
+}
+
+
+type SignInResponse {
+  message: String
+  customData: JSON
+  tokens: Tokens
+}
+type SignOutResponse {
+  message: String!
+  error: JSON
+}
+
 type User {
   id: ID!
   firstName: String!
@@ -21,6 +73,29 @@ type Query {
   claims(memberId: String!): [Claim]
   User(id: ID!): User
   Users: [User]
+  signUp(
+    username: String!
+    password: String!
+    email: String!
+    memberId: String
+    groupNumber: String
+    dob: String
+    firstName: String!
+    lastName: String!
+    insuranceProvider: String
+    mobileNumber: String!
+    streetAddress: String
+    apartmentNumber: String
+    zipCode: String
+    city: String
+    state: String
+  ): CognitoUserRegistrationResponse
+
+  signIn(username: String!, password: String!): SignInResponse
+
+  signOut(token: String!): SignOutResponse
+
+  comfirmCognitoUser(username:String!,confirmationCode:String!):CognitoUserConfirmationResponse
 }
 
 type Mutation {
