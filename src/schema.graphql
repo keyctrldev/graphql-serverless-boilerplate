@@ -21,6 +21,7 @@ type Query {
   claims(memberId: String!): [Claim]
   User(id: ID!): User
   Users: [User]
+  userProfileInfo(memberId: ID!): ProfileInfoResponse!
 }
 
 type Mutation {
@@ -31,4 +32,65 @@ type Mutation {
     email: String!
     phone: String!
   ): User
+  updateUserProfile(input: updateUserProfileInput!): updateUserProfileResponse!
+  signUp(input: SignUpInput!): SignUpResponse
+}
+
+input updateUserProfileInput {
+  memberId: String!
+  agreementAcceptance: String
+}
+
+type updateUserProfileResponse {
+  message: String!
+  success: Boolean!
+}
+
+type lookUpResponse {
+  message: String!
+  status: String!
+}
+
+input SignUpInput {
+  memberId: ID!
+  groupNumber: String!
+  dob: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  insuranceProvider: String!
+  mobileNumber: String!
+  address: AddressInput!
+}
+
+input AddressInput {
+  streetAddress: String!
+  apartmentNumber: String
+  zipCode: String!
+  city: String!
+  state: String!
+}
+
+
+type SignUpResponse {
+  success: Boolean!
+  message: String!
+}
+
+type ProfileInfoResponse {
+  memberId: ID!
+  groupNumber: String
+  mobileNumber: String
+  address: AddressInfo
+}
+
+
+# Address information structure
+type AddressInfo {
+  streetAddress: String!
+  apartmentNumber: String
+  zipCode: String!
+  city: String!
+  state: String!
 }
