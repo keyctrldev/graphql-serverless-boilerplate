@@ -9,26 +9,42 @@ type Claim {
   memberId: String
 }
 
+# Define the Email type for output
+type Email {  # Output type for responses
+  email: String
+  address: String
+}
+
+# Define the User type
 type User {
   id: ID!
   firstName: String!
   lastName: String!
-  email: String!
+  email: Email  # Change to Email type
   phone: String!
 }
 
+# Define the input type for email
+input EmailInput {  # Input type for mutations
+  email: String!
+  address: String
+}
+
+# Define the Query type
 type Query {
   claims(memberId: String!): [Claim]
   User(id: ID!): User
   Users: [User]
+  usersInformation: [User]
 }
 
+# Define the Mutation type
 type Mutation {
   createUser(
     id: ID!
     firstName: String!
     lastName: String!
-    email: String!
+    email: EmailInput!  # Use EmailInput type for mutation
     phone: String!
   ): User
 }
