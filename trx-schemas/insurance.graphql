@@ -1,0 +1,22 @@
+schema {
+  query: Query
+}
+
+type Query {
+  insurance: Insurance!
+}
+
+type Insurance {
+    memberId: ID!
+    memberName: String!
+    groupNumber: String!
+    rxBin: String!
+    pcn: String!
+    coPays: [CoPay!]
+}
+
+type CoPay {
+    type: String!
+    name: String!
+    amount: Float!
+}

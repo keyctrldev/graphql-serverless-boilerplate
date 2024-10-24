@@ -8,6 +8,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
+  timeout: 300
   environment:
     DYNAMODB_TABLE: Users
     SQL_HOST: '127.0.0.1'
