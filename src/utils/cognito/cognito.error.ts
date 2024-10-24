@@ -79,7 +79,7 @@ export interface CognitoError extends Error {
 // Handle AWS Cognito errors and map them to GraphQL errors
 export const handleCognitoError = (error: CognitoError): GraphQLError => {
   const errorType = error.code || error.name;
-  const mappedError = cognitoErrorMap[errorType!];
+  const mappedError = cognitoErrorMap[errorType];
 
   if (mappedError) {
     const options: GraphQLErrorOptions = {

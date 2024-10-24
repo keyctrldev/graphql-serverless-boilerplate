@@ -83,7 +83,11 @@ export const signUp = async (input: SignUpInput) => {
     } else {
       throw new Error("Failed to add user");
     }
-  } catch (err: any) {
+    
+  } 
+  // eslint-disable-next-line
+  catch (err: any) {
+    
     if (err.$metadata.httpStatusCode == 400) {
       throw new ApolloError("User already exists", "BAD_REQUEST", {
         statusCode: 400,

@@ -51,7 +51,9 @@ export const cognitoUser = async (args: SignUpInput) => {
       userSub: response.UserSub,
       codeDeliveryDetails: response.CodeDeliveryDetails,
     };
-  } catch (err: any) {
+  } 
+  // eslint-disable-next-line
+  catch (err: any) {
     throw new ApolloError(err.message, err.code, err)
   }
 };
