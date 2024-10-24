@@ -1,12 +1,25 @@
-import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { dynamoDB } from "../dynamodb";
 import { UpdateUserProfileInput, SignUpInput } from "../types";
 import { ApolloError } from "apollo-server-lambda";
+import {
+  signUpResponse,
+  updateUserProfileResponse,
+} from "../mappers/signup-response.mapper";
+import { requiredFields } from "../utils/utils";
+import { GraphQLResolveInfo } from "graphql";
 
-export const userProfileInfo = async (memberId: string) => {
+
+export const userProfileInfo = async (
+  memberId: string,
+  info: GraphQLResolveInfo
+) => {
+  const projectionExpression = await requiredFields(info);
+
   const params = {
     TableName: "User",
     Key: { memberId: memberId },
+    projectionExpression: projectionExpression,
   };
   try {
     const result = await dynamoDB.get(params);
@@ -33,13 +46,11 @@ export const updateUserProfile = async (input: UpdateUserProfileInput) => {
   try {
     const command = new UpdateCommand(params);
     const result = await dynamoDB.send(command);
-    if (result.$metadata.httpStatusCode != 200) {
-      throw new Error("Failed to add user");
+    if (result.$metadata.httpStatusCode == 200) {
+      const response = await updateUserProfileResponse();
+      return response;
     }
-    return {
-      success: true,
-      message: "User updated successfully",
-    };
+    throw new Error("Failed to add user");
   } catch (err) {
     throw new ApolloError("Error", "Error", { err });
   }
@@ -60,17 +71,24 @@ export const signUp = async (input: SignUpInput) => {
       mobileNumber: input.mobileNumber,
       address: input.address,
     },
+    ConditionExpression: "attribute_not_exists(memberId)",
   };
   try {
-    const result = await dynamoDB.put(params);
-    if (result.$metadata.httpStatusCode != 200) {
+    const command = new PutCommand(params); // Create the put command
+    // console.log('---->', command)
+    const result = await dynamoDB.send(command);
+    if (result.$metadata.httpStatusCode == 200) {
+      const response = await signUpResponse();
+      return response;
+    } else {
       throw new Error("Failed to add user");
     }
-    return {
-      success: true,
-      message: "User added successfully",
-    };
-  } catch (err) {
+  } catch (err: any) {
+    if (err.$metadata.httpStatusCode == 400) {
+      throw new ApolloError("User already exists", "BAD_REQUEST", {
+        statusCode: 400,
+      });
+    }
     throw new ApolloError("Error", "Error", { err });
   }
 };

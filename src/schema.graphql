@@ -22,6 +22,9 @@ type Query {
   User(id: ID!): User
   Users: [User]
   userProfileInfo(memberId: ID!): ProfileInfoResponse!
+  # signIn(username: String!, password: String!): SignInResponse
+  # signOut(token: String!): SignOutResponse
+  # comfirmCognitoUser(username:String!,confirmationCode:String!):CognitoUserConfirmationResponse
 }
 
 type Mutation {
@@ -37,8 +40,14 @@ type Mutation {
 }
 
 input updateUserProfileInput {
+  """
+  This is the memberId for a member
+  """
   memberId: String!
-  agreementAcceptance: String
+  """
+  agreementAcceptance is know whether the member accepted to the agreement
+  """
+  agreementAcceptance: Boolean!
 }
 
 type updateUserProfileResponse {
@@ -52,26 +61,71 @@ type lookUpResponse {
 }
 
 input SignUpInput {
+  username: String!
+  """
+  This is the memberId for a member
+  """
   memberId: ID!
+  """
+  This is the groupNumber for a member
+  """
   groupNumber: String!
+  """
+  Date of birth of the member
+  """
   dob: String!
+  """
+  First Name of the member
+  """
   firstName: String!
+  """
+  Last Name of the member
+  """
   lastName: String!
+  """
+  Email Id of the member
+  """
   email: String!
+  """
+  password
+  """
   password: String!
+  """
+  Insurance Provider of the member
+  """
   insuranceProvider: String!
+  """
+  Mobile Number of the member
+  """
   mobileNumber: String!
+  """
+  Address of the member
+  """
   address: AddressInput!
 }
 
 input AddressInput {
+  """
+  Street Address of the member
+  """
   streetAddress: String!
+  """
+  Apartment Number of the member
+  """
   apartmentNumber: String
+  """
+  Zipcode of the place member belongs to
+  """
   zipCode: String!
+  """
+  Name of the City member belongs to
+  """
   city: String!
+  """
+  Name of the State member belongs to
+  """
   state: String!
 }
-
 
 type SignUpResponse {
   success: Boolean!
@@ -85,7 +139,6 @@ type ProfileInfoResponse {
   address: AddressInfo
 }
 
-
 # Address information structure
 type AddressInfo {
   streetAddress: String!
@@ -93,4 +146,54 @@ type AddressInfo {
   zipCode: String!
   city: String!
   state: String!
+}
+
+type CognitoUser {
+  username: String!
+  email: String!
+  memberId: String
+  groupNumber: String
+  dob: String
+  firstName: String!
+  lastName: String!
+  insuranceProvider: String
+  mobileNumber: String!
+  streetAddress: String
+  apartmentNumber: String
+  zipCode: String
+  city: String
+  state: String
+}
+scalar JSON
+type CognitoUserRegistrationResponse {
+  username: String
+  userConfirmed: Boolean
+  userSub: String
+  codeDeliveryDetails: JSON
+}
+
+type CognitoUserConfirmationResponse {
+  status: Int
+  message: String
+}
+
+type CognitoUserConfirmation {
+  confirmationCode: String!
+  username: String!
+}
+
+type Tokens {
+  accessToken: String
+  idToken: String
+  refreshToken: String
+}
+
+type SignInResponse {
+  message: String
+  customData: JSON
+  tokens: Tokens
+}
+type SignOutResponse {
+  message: String!
+  error: JSON
 }
