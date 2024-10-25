@@ -7,6 +7,7 @@ const config: CodegenConfig = {
       plugins: ["typescript", "typescript-resolvers"],
     },
   },
+  verbose:true,
 };
 
 export default config;
