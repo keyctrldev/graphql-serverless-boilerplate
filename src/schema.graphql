@@ -1,3 +1,9 @@
+directive @upper on FIELD_DEFINITION
+directive @masked on FIELD_DEFINITION
+directive @validateEmail on FIELD_DEFINITION
+directive @deprecatedField(reason: String) on FIELD_DEFINITION
+directive @default(value: String) on FIELD_DEFINITION
+
 type Claim {
   claimStatus: String
   medicationName: String
@@ -10,11 +16,11 @@ type Claim {
 }
 
 type User {
-  id: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
-  phone: String!
+  id: ID! @deprecatedField(reason: "Use only Numbers")
+  firstName: String! @upper
+  lastName: String  @default(value: "lastName")
+  email: String! @validateEmail
+  phone: String!  @masked
 }
 
 type Query {
@@ -25,10 +31,10 @@ type Query {
 
 type Mutation {
   createUser(
-    id: ID!
+    id: ID! 
     firstName: String!
-    lastName: String!
-    email: String!
+    lastName: String
+    email: String! 
     phone: String!
   ): User
 }
